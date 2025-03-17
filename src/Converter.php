@@ -16,6 +16,13 @@ class Converter
     protected ConversionStrategy $strategy;
 
     /**
+     * The validator to use for the conversion.
+     *
+     * @var \Blaspsoft\Doxswap\Contracts\ConversionValidator
+     */
+    protected ConversionValidator $validator;
+
+    /**
      * Create a new converter instance.
      *
      * @param string $driver
@@ -28,6 +35,8 @@ class Converter
             'pandoc' => new PandocStrategy(),
             default => throw new \Exception("Invalid driver: {$driver}"),
         };
+
+        $this->validator = new ConversionValidator();
     }
 
     /**
@@ -39,6 +48,8 @@ class Converter
      */
     public function convert(string $inputFile, string $outputFile): string
     {
+        $driverName = get_class($this->strategy);
+        $this->validator->validate($inputFile, $outputFile, $driverName);
         return $this->strategy->convert($inputFile, $outputFile);
     }
 }
