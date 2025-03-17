@@ -36,7 +36,7 @@ class Converter
             default => throw new \Exception("Invalid driver: {$driver}"),
         };
 
-        $this->validator = new ConversionValidator();
+        $this->validator = new ConversionValidator($driver);
     }
 
     /**

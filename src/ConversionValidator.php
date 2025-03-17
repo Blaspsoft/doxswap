@@ -2,8 +2,18 @@
 
 namespace Blaspsoft\Doxswap;
 
+use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
+use Blaspsoft\Doxswap\Exceptions\UnsupportedConversionException;
+
 class ConversionValidator
 {
+    /**
+     * The driver name.
+     *
+     * @var string
+     */
+    protected string $driver;
+
     /**
      * The supported conversions.
      *
@@ -23,8 +33,9 @@ class ConversionValidator
      *
      * @return void
      */
-    public function __construct(string$driver)
+    public function __construct(string $driver)
     {
+        $this->driver = $driver;
         $this->supportedConversions = config('doxswap.supported_conversions');
         $this->supportedMimeTypes = config('doxswap.supported_mime_types');
     }
@@ -42,15 +53,15 @@ class ConversionValidator
         $outputExtension = $this->getExtension($outputFile);
 
         if (!$this->inputFileExists($inputFile)) {
-            throw new \Exception('Input file not found');
+            throw new FileNotFoundException('Input file not found', $this->driver); //need to fix this
         }
 
         if (!$this->isSupportedConversion($inputExtension, $outputExtension)) {
-            throw new \Exception('Conversion not supported');
+            throw new UnsupportedConversionException('Conversion not supported', $this->driver);
         }
 
         if (!$this->isSupportedMimeType($inputExtension)) {
-            throw new \Exception('Input file mime type not supported');
+            throw new UnsupportedMimeTypeException('Input file mime type not supported', $this->driver);
         }
 
         return true;
