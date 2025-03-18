@@ -4,7 +4,7 @@ namespace Blaspsoft\Doxswap;
 
 use Illuminate\Support\Facades\Storage;
 
-class ConversionCleanupService
+class ConversionCleanup
 {
     /**
      * The input disk.
@@ -28,7 +28,14 @@ class ConversionCleanupService
     protected bool $performCleanup;
 
     /**
-     * Create a new ConversionCleanupService instance.
+     * The cleanup strategy.
+     *
+     * @var string
+     */
+    protected string $strategy;
+
+    /**
+     * Create a new ConversionCleanup instance.
      *
      * @return void
      */
@@ -38,17 +45,16 @@ class ConversionCleanupService
 
         $this->outputDisk = config('doxswap.output_disk');
 
-        $this->performCleanup = config('doxswap.perform_cleanup');
+        $this->strategy = config('doxswap.cleanup_strategy'); // Cleanup strategies input, output, both, none
     }
 
     /**
      * Cleanup the input file.
      *
      * @param string $inputFile
-     * @param string $outputFile
      * @return void
      */
-    public function cleanupInputFile(string $inputFile): void
+    protected function cleanupInput(string $inputFile): void
     {
         Storage::disk($this->inputDisk)->delete($inputFile);
     }
@@ -59,7 +65,7 @@ class ConversionCleanupService
      * @param string $outputFile
      * @return void
      */
-    public function cleanupOutputFile(string $outputFile): void
+    protected function cleanupOutput(string $outputFile): void
     {
         Storage::disk($this->outputDisk)->delete($outputFile);
     }
@@ -71,9 +77,26 @@ class ConversionCleanupService
      * @param string $outputFile
      * @return void
      */
+    protected function cleanupInputAndOutput(string $inputFile, string $outputFile): void
+    {
+        $this->cleanupInput($inputFile);
+        $this->cleanupOutput($outputFile);
+    }
+
+    /**
+     * Cleanup the input file and output files based on the strategy.
+     *
+     * @param string $inputFile
+     * @param string $outputFile
+     * @return void
+     */
     public function cleanup(string $inputFile, string $outputFile): void
     {
-        $this->cleanupInputFile($inputFile);
-        $this->cleanupOutputFile($outputFile);
+        match ($this->strategy) {
+            'input' => $this->cleanupInput($inputFile),
+            'output' => $this->cleanupOutput($outputFile),
+            'both' => $this->cleanupInputAndOutput($inputFile, $outputFile),
+            'none' => null,
+        };
     }
 }

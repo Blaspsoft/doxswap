@@ -23,9 +23,15 @@ class Converter
     protected ConversionValidator $validator;
 
     /**
+     * The cleanup to use for the conversion.
+     *
+     * @var \Blaspsoft\Doxswap\Contracts\ConversionCleanup
+     */
+    protected ConversionCleanup $cleanup;
+
+    /**
      * Create a new converter instance.
      *
-     * @param string $driver
      * @return void
      */
     public function __construct() 
@@ -35,6 +41,8 @@ class Converter
         $this->setStrategy($driver);
 
         $this->validator = new ConversionValidator($driver);
+
+        $this->cleanup = new ConversionCleanup();
     }
 
     /** 
@@ -65,6 +73,10 @@ class Converter
 
         $this->validator->validate($inputFile, $outputFile, $driver);
 
-        return $this->strategy->convert($inputFile, $outputFile);
+        $outputFile = $this->strategy->convert($inputFile, $outputFile);
+
+        $this->cleanup->cleanup($inputFile, $outputFile);
+
+        return $outputFile;
     }
 }
