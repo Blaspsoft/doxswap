@@ -2,10 +2,12 @@
 
 namespace Blaspsoft\Doxswap\Strategies;
 
+use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class LibreOfficeStrategy implements ConversionStrategy
+class LibreOffice implements ConversionStrategy
 {
     /**
      * The path to the LibreOffice binary.
@@ -31,14 +33,14 @@ class LibreOfficeStrategy implements ConversionStrategy
      * @param string $outputFile
      * @return string
      */
-    public function convert(string $inputFile, string $outputFile): string
+    public function convert(string $inputFile, string $toFormat): string
     {
-        /*$command = [
-            $this->path,
-            '--headless',
-            '--convert-to', $format ,
-            '--outdir', Storage::disk($this->outputDisk)->path(''),
-            $filePath,
+        $command = [
+            $this->path, // Path to the LibreOffice binary
+            '--headless', // Run in headless mode
+            '--convert-to', $toFormat , // Convert to the specified format
+            '--outdir', Storage::disk('public')->path(''), // Output directory
+            $inputFile, // Input file
         ];
 
         $process = new Process($command);
@@ -48,8 +50,6 @@ class LibreOfficeStrategy implements ConversionStrategy
             throw new ProcessFailedException($process);
         }
 
-        return $outputFile;*/
-
-        return 'test'; // TODO: Implement convert() method.
+        return 'test';
     }
 }

@@ -2,25 +2,19 @@
 
 namespace Blaspsoft\Doxswap;
 
-use Blaspsoft\Doxswap\Strategies\PandocStrategy;
-use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
-use Blaspsoft\Doxswap\Strategies\LibreOfficeStrategy;
+use Blaspsoft\Doxswap\ConversionCleanup;
+use Blaspsoft\Doxswap\Strategies\Pandoc;
+use Blaspsoft\Doxswap\Strategies\LibreOffice;
+use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 
 class Converter
 {
     /**
      * The strategy to use for the conversion.
      *
-     * @var \Blaspsoft\Doxswap\Contracts\ConversionStrategy
+     * @var \Blaspsoft\Doxswap\Contracts\ConvertibleFormat
      */
-    protected ConversionStrategy $strategy;
-
-    /**
-     * The validator to use for the conversion.
-     *
-     * @var \Blaspsoft\Doxswap\Contracts\ConversionValidator
-     */
-    protected ConversionValidator $validator;
+    protected FormatRegistry $formatRegistry;
 
     /**
      * The file naming service.
@@ -43,44 +37,21 @@ class Converter
      */
     public function __construct() 
     {
-        $driver = config('doxswap.driver');
-
-        $this->setStrategy($driver);
-
-        $this->validator = new ConversionValidator($driver);
+        $this->formatRegistry = new FormatRegistry();
 
         $this->cleanup = new ConversionCleanup();
-    }
-
-    /** 
-     * Set the strategy for the converter.
-     *
-     * @param string $driver
-     * @return void
-     */
-    public function setStrategy(string $driver): void
-    {
-        $this->strategy = match ($driver) {
-            'libreoffice' => new LibreOfficeStrategy(),
-            'pandoc' => new PandocStrategy(),
-            default => throw new \Exception("Invalid driver: {$driver}"),
-        };
     }
 
     /**
      * Convert a file to a new format.
      *
      * @param string $inputFile
-     * @param string $outputFile
+     * @param string $toFormat
      * @return string
      */
-    public function convert(string $inputFile, string $outputFile): string
+    public function convert(string $inputFile, string $toFormat): string
     {
-        $driver = get_class($this->strategy);
-
-        $this->validator->validate($inputFile, $outputFile, $driver);
-
-        $outputFile = $this->strategy->convert($inputFile, $outputFile);
+        $outputFile = $this->formatRegistry->convert($inputFile, $toFormat);
 
         $outputFile = $this->fileHandler->rename($outputFile);
 

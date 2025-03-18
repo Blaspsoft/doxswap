@@ -4,7 +4,6 @@ namespace Blaspsoft\Doxswap;
 
 /**
  * @method static \Blaspsoft\Doxswap\Doxswap convert(string $file, string $toFormat)
- * @method static \Blaspsoft\Doxswap\Doxswap driver(string $driver)
  */
 class Doxswap
 {
@@ -60,19 +59,6 @@ class Doxswap
         $this->toFormat = $toFormat;
 
         $this->outputFile = $this->converter->convert($this->inputFile, $this->toFormat);
-
-        return $this;
-    }
-
-    /**
-     * Set the driver for the converter.
-     *
-     * @param string $driver
-     * @return self
-     */
-    public function driver(string $driver): self
-    {
-        $this->converter->setStrategy($driver);
 
         return $this;
     }

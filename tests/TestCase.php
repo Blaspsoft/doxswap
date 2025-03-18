@@ -31,9 +31,8 @@ abstract class TestCase extends BaseTestCase
     {
         $app['config']->set('doxswap.input_disk', 'input');
         $app['config']->set('doxswap.output_disk', 'output');
-        $app['config']->set('doxswap.perform_cleanup', false);
-        //$app['config']->set('doxswap.libre_office_path', '/Applications/LibreOffice.app/Contents/MacOS/soffice'); uncomment this for macos
-        $app['config']->set('doxswap.mime_types', config('doxswap.mime_types'));
-        $app['config']->set('doxswap.supported_conversions', config('doxswap.supported_conversions'));
+        $app['config']->set('doxswap.cleanup_strategy', 'none');
+        $app['config']->set('doxswap.drivers.libreoffice.path', '/Applications/LibreOffice.app/Contents/MacOS/soffice');
+        $app['config']->set('doxswap.drivers.pandoc.path', '/usr/bin/pandoc');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Blaspsoft\Doxswap;
 
+use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedConversionException;
@@ -34,7 +35,7 @@ class ConversionValidator
      *
      * @return void
      */
-    public function __construct(string $driver)
+    public function __construct(string $driver = 'libreoffice')
     {
         $this->driver = $driver;
 
@@ -50,7 +51,7 @@ class ConversionValidator
      * @param string $outputFile
      * @return bool
      */
-    public function validate(string $inputFile, string $outputFile): bool
+    public function validate(ConvertibleFormat $inputFormat, string $inputFile, string $outputFile): bool
     {
         $inputExtension = $this->getExtension($inputFile);
 
@@ -60,7 +61,7 @@ class ConversionValidator
             throw new InputFileNotFoundException('Input file not found', $inputFile);
         }
 
-        if (!$this->isSupportedConversion($inputExtension, $outputExtension)) {
+        if (!in_array($outputExtension, $inputFormat->getSupportedConversions())) {
             throw new UnsupportedConversionException('Conversion not supported', $this->driver);
         }
 

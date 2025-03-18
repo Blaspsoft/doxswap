@@ -4,7 +4,7 @@ namespace Blaspsoft\Doxswap\Strategies;
 
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
 
-class PandocStrategy implements ConversionStrategy
+class Pandoc implements ConversionStrategy
 {
     /**
      * The path to the Pandoc binary.
