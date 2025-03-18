@@ -80,6 +80,7 @@ class ConversionCleanup
     protected function cleanupInputAndOutput(string $inputFile, string $outputFile): void
     {
         $this->cleanupInput($inputFile);
+        
         $this->cleanupOutput($outputFile);
     }
 
