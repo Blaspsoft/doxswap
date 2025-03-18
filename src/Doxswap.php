@@ -2,9 +2,6 @@
 
 namespace Blaspsoft\Doxswap;
 
-use Blaspsoft\Doxswap\ConversionService;
-use Blaspsoft\Doxswap\Exceptions\ConversionFailedException;
-
 /**
  * @method static \Blaspsoft\Doxswap\Doxswap convert(string $file, string $toFormat)
  * @method static \Blaspsoft\Doxswap\Doxswap configure(string $disk, string $outputDisk)
@@ -33,15 +30,15 @@ class Doxswap
     public $toFormat;
 
     /**
-     * The conversion service.
+     * The converter.
      *
-     * @var \Blaspsoft\Doxswap\ConversionService
+     * @var \Blaspsoft\Doxswap\Converter
      */
-    protected $conversionService;
+    protected $converter;
 
     public function __construct()
     {
-        $this->conversionService = new ConversionService();
+        $this->converter = new Converter();
     }
 
     /**
@@ -57,7 +54,20 @@ class Doxswap
 
         $this->toFormat = $toFormat;
 
-        $this->outputFile = $this->conversionService->convertFile($this->inputFile, $this->toFormat);
+        $this->outputFile = $this->converter->convert($this->inputFile, $this->toFormat);
+
+        return $this;
+    }
+
+    /**
+     * Set the driver for the converter.
+     *
+     * @param string $driver
+     * @return self
+     */
+    public function driver(string $driver): self
+    {
+        $this->converter->setStrategy($driver);
 
         return $this;
     }

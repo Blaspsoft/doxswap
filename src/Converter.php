@@ -28,15 +28,28 @@ class Converter
      * @param string $driver
      * @return void
      */
-    public function __construct(string $driver) 
+    public function __construct() 
+    {
+        $driver = config('doxswap.driver');
+
+        $this->setStrategy($driver);
+
+        $this->validator = new ConversionValidator($driver);
+    }
+
+    /** 
+     * Set the strategy for the converter.
+     *
+     * @param string $driver
+     * @return void
+     */
+    public function setStrategy(string $driver): void
     {
         $this->strategy = match ($driver) {
             'libreoffice' => new LibreOfficeStrategy(),
             'pandoc' => new PandocStrategy(),
             default => throw new \Exception("Invalid driver: {$driver}"),
         };
-
-        $this->validator = new ConversionValidator($driver);
     }
 
     /**
@@ -48,8 +61,10 @@ class Converter
      */
     public function convert(string $inputFile, string $outputFile): string
     {
-        $driverName = get_class($this->strategy);
-        $this->validator->validate($inputFile, $outputFile, $driverName);
+        $driver = get_class($this->strategy);
+
+        $this->validator->validate($inputFile, $outputFile, $driver);
+
         return $this->strategy->convert($inputFile, $outputFile);
     }
 }

@@ -37,7 +37,9 @@ class ConversionValidator
     public function __construct(string $driver)
     {
         $this->driver = $driver;
+
         $this->supportedConversions = config('doxswap.supported_conversions');
+        
         $this->supportedMimeTypes = config('doxswap.supported_mime_types');
     }
 
@@ -51,6 +53,7 @@ class ConversionValidator
     public function validate(string $inputFile, string $outputFile): bool
     {
         $inputExtension = $this->getExtension($inputFile);
+
         $outputExtension = $this->getExtension($outputFile);
 
         if (!$this->inputFileExists($inputFile)) {

@@ -35,5 +35,21 @@ class LibreOfficeStrategy implements ConversionStrategy
         $command = "soffice --headless --convert-to {$outputFile} {$inputFile}";
         exec($command);
         return $outputFile;
+
+
+        $command = [
+            $this->path,
+            '--headless',
+            '--convert-to', $format ,
+            '--outdir', Storage::disk($this->outputDisk)->path(''),
+            $filePath,
+        ];
+
+        $process = new Process($command);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
     }
 }
