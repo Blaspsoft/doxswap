@@ -17,6 +17,20 @@ class LibreOffice implements ConversionStrategy
     protected string $path;
 
     /**
+     * The input disk.
+     *
+     * @var string
+     */
+    protected string $inputDisk;
+
+    /**
+     * The output disk.
+     *
+     * @var string
+     */
+    protected string $outputDisk;
+
+    /**
      * Create a new LibreOfficeStrategy instance.
      *
      * @return void
@@ -24,6 +38,8 @@ class LibreOffice implements ConversionStrategy
     public function __construct()
     {
         $this->path = config('doxswap.drivers.libreoffice.path');
+        $this->inputDisk = config('doxswap.input_disk');
+        $this->outputDisk = config('doxswap.output_disk');
     }
 
     /**
@@ -39,7 +55,7 @@ class LibreOffice implements ConversionStrategy
             $this->path, // Path to the LibreOffice binary
             '--headless', // Run in headless mode
             '--convert-to', $toFormat , // Convert to the specified format
-            '--outdir', Storage::disk('public')->path(''), // Output directory
+            '--outdir', Storage::disk($this->outputDisk)->path(''), // Output directory
             $inputFile, // Input file
         ];
 
