@@ -2,6 +2,7 @@
 
 namespace Blaspsoft\Doxswap;
 
+use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedConversionException;
 
@@ -53,7 +54,7 @@ class ConversionValidator
         $outputExtension = $this->getExtension($outputFile);
 
         if (!$this->inputFileExists($inputFile)) {
-            throw new FileNotFoundException('Input file not found', $this->driver); //need to fix this
+            throw new InputFileNotFoundException('Input file not found', $inputFile);
         }
 
         if (!$this->isSupportedConversion($inputExtension, $outputExtension)) {
