@@ -3,6 +3,7 @@
 namespace Blaspsoft\Doxswap\Strategies;
 
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class LibreOfficeStrategy implements ConversionStrategy
 {
@@ -32,11 +33,6 @@ class LibreOfficeStrategy implements ConversionStrategy
      */
     public function convert(string $inputFile, string $outputFile): string
     {
-        $command = "soffice --headless --convert-to {$outputFile} {$inputFile}";
-        exec($command);
-        return $outputFile;
-
-
         $command = [
             $this->path,
             '--headless',
@@ -51,5 +47,7 @@ class LibreOfficeStrategy implements ConversionStrategy
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
+
+        return $outputFile;
     }
 }
