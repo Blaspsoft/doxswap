@@ -33,7 +33,7 @@ class LibreOfficeStrategy implements ConversionStrategy
      */
     public function convert(string $inputFile, string $outputFile): string
     {
-        $command = [
+        /*$command = [
             $this->path,
             '--headless',
             '--convert-to', $format ,
@@ -48,6 +48,8 @@ class LibreOfficeStrategy implements ConversionStrategy
             throw new ProcessFailedException($process);
         }
 
-        return $outputFile;
+        return $outputFile;*/
+
+        return 'test'; // TODO: Implement convert() method.
     }
 }
