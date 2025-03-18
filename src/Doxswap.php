@@ -4,7 +4,7 @@ namespace Blaspsoft\Doxswap;
 
 /**
  * @method static \Blaspsoft\Doxswap\Doxswap convert(string $file, string $toFormat)
- * @method static \Blaspsoft\Doxswap\Doxswap configure(string $disk, string $outputDisk)
+ * @method static \Blaspsoft\Doxswap\Doxswap driver(string $driver)
  */
 class Doxswap
 {
@@ -36,6 +36,11 @@ class Doxswap
      */
     protected $converter;
 
+    /**
+     * Create a new Doxswap instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->converter = new Converter();
@@ -45,10 +50,10 @@ class Doxswap
      * Convert a file to a different format
      *
      * @param string $file The absolute path to the file to convert
-     * @param string $format The format to convert the file to
+     * @param string $toFormat The format to convert the file to
      * @return self
      */
-    public function convert($file, $toFormat)
+    public function convert(string $file, string $toFormat)
     {
         $this->inputFile = $file;
 

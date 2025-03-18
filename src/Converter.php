@@ -23,6 +23,13 @@ class Converter
     protected ConversionValidator $validator;
 
     /**
+     * The file naming service.
+     *
+     * @var \Blaspsoft\Doxswap\FileHandler
+     */
+    protected FileHandler $fileHandler; 
+
+    /**
      * The cleanup to use for the conversion.
      *
      * @var \Blaspsoft\Doxswap\Contracts\ConversionCleanup
@@ -74,6 +81,8 @@ class Converter
         $this->validator->validate($inputFile, $outputFile, $driver);
 
         $outputFile = $this->strategy->convert($inputFile, $outputFile);
+
+        $outputFile = $this->fileHandler->rename($outputFile);
 
         $this->cleanup->cleanup($inputFile, $outputFile);
 
