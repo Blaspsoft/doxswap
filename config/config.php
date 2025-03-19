@@ -4,16 +4,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Driver
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify the driver to use for the conversion.
-    |
-    */
-    'driver' => env('DOXSWAP_DRIVER', 'libreoffice'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Disk
     |--------------------------------------------------------------------------
     |
@@ -106,35 +96,13 @@ return [
     |
     | Here you may specify the drivers to use for the conversion.
     |
+    | Supported drivers:
+    | - libreoffice: The LibreOffice driver.
+    | - pandoc: The Pandoc driver.
+    |   
     */
     'drivers' => [
-
-        'libreoffice' => [
-
-            'path' => env('LIBRE_OFFICE_PATH', '/usr/bin/soffice'),
-
-            /*
-            |--------------------------------------------------------------------------
-            | Supported Conversions
-            |--------------------------------------------------------------------------
-            |
-            | Here you may specify the supported conversions for each file type.
-            |
-            */
-            'supported_conversions' => [
-                'tiff' => ['pdf', 'jpg', 'png'],
-            ],
-
-
-            'mime_types' => [
-                'tiff' => 'image/tiff',
-            ]
-
-        ],
-
-        'pandoc' => [
-
-            'path' => env('PANDOC_PATH', '/usr/bin/pandoc'),
-        ],
+        'libreoffice_path' => env('LIBRE_OFFICE_PATH', '/usr/bin/soffice'),
+        'pandoc_path' => env('PANDOC_PATH', '/usr/bin/pandoc'),
     ],
 ];
