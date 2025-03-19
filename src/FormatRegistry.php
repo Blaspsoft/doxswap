@@ -26,6 +26,7 @@ use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedConversionException;
+use Illuminate\Support\Facades\Log;
 
 class FormatRegistry
 {
@@ -167,7 +168,10 @@ class FormatRegistry
             throw new UnsupportedConversionException($inputFormat->getName(), $toFormat);
         }
 
-        if (!$this->isSupportedMimeType($inputFormat, File::mimeType($inputFile))) {
+        $mimeType = File::mimeType($inputFile);
+        Log::info("Detected MIME type: $mimeType for file: $inputFile");
+
+        if (!$this->isSupportedMimeType($inputFormat, $mimeType)) {
             throw new UnsupportedMimeTypeException($inputFormat->getName(), $toFormat);
         }
 
