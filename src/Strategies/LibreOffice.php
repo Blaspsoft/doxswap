@@ -37,7 +37,7 @@ class LibreOffice implements ConversionStrategy
      */
     public function __construct()
     {
-        $this->path = config('doxswap.drivers.libreoffice.path');
+        $this->path = config('doxswap.drivers.libreoffice_path');
 
         $this->inputDisk = config('doxswap.input_disk');
 
