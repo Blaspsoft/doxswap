@@ -122,7 +122,6 @@ return [
             |
             */
             'supported_conversions' => [
-                'odp' => ['pdf', 'pptx', 'ppt'],
                 'svg' => ['pdf', 'png', 'jpg', 'tiff'],
                 'jpg' => ['pdf', 'png', 'svg'],
                 'png' => ['pdf', 'jpg', 'svg'],
@@ -132,7 +131,6 @@ return [
 
 
             'mime_types' => [
-                'odp' => 'application/vnd.oasis.opendocument.presentation',
                 'svg' => 'image/svg+xml',
                 'jpg' => 'image/jpeg',
                 'png' => 'image/png',
