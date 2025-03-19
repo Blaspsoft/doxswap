@@ -168,7 +168,7 @@ class FormatRegistry
         if (!$this->isSupportedConversion($inputFormat, $toFormat)) {
             throw new UnsupportedConversionException($inputFormat->getName(), $toFormat);
         }
-        Log::info("Checking if mime type is supported: " . $inputFormat->getMimeType() . " and " . $inputFile);
+       echo("Checking if mime type is supported: " . $inputFormat->getMimeType() . " and " . $inputFile);
         if (!$this->isSupportedMimeType($inputFormat, File::mimeType($inputFile))) {
             throw new UnsupportedMimeTypeException($inputFormat->getName(), $toFormat);
         }
