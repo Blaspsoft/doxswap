@@ -6,7 +6,7 @@ use Blaspsoft\Onym\Facades\Onym;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-class FileHandler
+class Filename
 {
     /**
      * The file naming strategy.
@@ -46,14 +46,17 @@ class FileHandler
     /**
      * Generate a file name based on the strategy.
      *
+     * @param string $filePath
      * @return string
      */
-    protected function generate(string $outputFile): string
+    protected function generateFileName(string $filePath): string
     {
+        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
         return match ($this->strategy) {
-            'original' => basename($outputFile),
-            'random' => Onym::make(strategy: 'random', extension: $outputFile, options: $this->options),
-            'timestamp' => Onym::make(strategy: 'timestamp', extension: $outputFile, options: $this->options),
+            'original' => basename($filePath),
+            'random' => Onym::make(strategy: 'random', extension: $extension, options: $this->options),
+            'timestamp' => Onym::make(strategy: 'timestamp', extension: $extension, options: $this->options),
         };
     }
 
@@ -63,11 +66,13 @@ class FileHandler
      * @param string $filePath
      * @return string
      */
-    public function rename(string $filePath): string
+    public static function rename(string $filePath): string
     {
-        $filename = $this->generate($filePath);
+        $instance = new self();
 
-        $newOutputFilePath = Storage::disk($this->outputDisk)->path($filename);
+        $filename = $instance->generateFileName($filePath);
+
+        $newOutputFilePath = Storage::disk($instance->outputDisk)->path($filename);
 
         File::move($filePath, $newOutputFilePath);
 

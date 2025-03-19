@@ -8,8 +8,9 @@ interface ConversionStrategy
      * Convert a file to a new format.
      *
      * @param string $inputFile
-     * @param string $outputFile
+     * @param string $fromFormat
+     * @param string $toFormat
      * @return string
      */
-    public function convert(string $inputFile, string $outputFile): string;
+    public function convert(string $inputFile, string $fromFormat, string $toFormat): string;
 }

@@ -4,7 +4,7 @@ namespace Blaspsoft\Doxswap;
 
 use Blaspsoft\Doxswap\Doxswap;
 use Illuminate\Support\ServiceProvider;
-use Blaspsoft\Doxswap\ConversionService;
+use Blaspsoft\Doxswap\Converter;
 
 class DoxswapServiceProvider extends ServiceProvider
 {
@@ -28,7 +28,7 @@ class DoxswapServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'doxswap');
 
         $this->app->bind('doxswap', function () {
-            return new Doxswap(new ConversionService());
+            return new Doxswap(new Converter());
         });
     }
 }
