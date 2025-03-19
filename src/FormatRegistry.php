@@ -5,6 +5,8 @@ namespace Blaspsoft\Doxswap;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Blaspsoft\Doxswap\Formats\OdtFormat;
+use Blaspsoft\Doxswap\Formats\RtfFormat;
 use Blaspsoft\Doxswap\Formats\DocFormat;
 use Blaspsoft\Doxswap\Formats\DocxFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
@@ -40,6 +42,10 @@ class FormatRegistry
         $this->register(new DocFormat());
 
         $this->register(new DocxFormat());
+
+        $this->register(new OdtFormat());
+
+        $this->register(new RtfFormat());
     }
 
     /**
