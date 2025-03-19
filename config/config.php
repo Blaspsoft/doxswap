@@ -122,7 +122,6 @@ return [
             |
             */
             'supported_conversions' => [
-                'jpg' => ['pdf', 'png', 'svg'],
                 'png' => ['pdf', 'jpg', 'svg'],
                 'bmp' => ['pdf', 'jpg', 'png'],
                 'tiff' => ['pdf', 'jpg', 'png'],
@@ -130,7 +129,6 @@ return [
 
 
             'mime_types' => [
-                'jpg' => 'image/jpeg',
                 'png' => 'image/png',
                 'bmp' => 'image/bmp',
                 'tiff' => 'image/tiff',

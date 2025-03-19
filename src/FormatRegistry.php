@@ -19,6 +19,7 @@ use Blaspsoft\Doxswap\Formats\PptxFormat;
 use Blaspsoft\Doxswap\Formats\PptFormat;
 use Blaspsoft\Doxswap\Formats\OdpFormat;
 use Blaspsoft\Doxswap\Formats\SvgFormat;
+use Blaspsoft\Doxswap\Formats\JpgFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
@@ -76,6 +77,8 @@ class FormatRegistry
         $this->register(new OdpFormat());
 
         $this->register(new SvgFormat());
+
+        $this->register(new JpgFormat());
     }
 
     /**
