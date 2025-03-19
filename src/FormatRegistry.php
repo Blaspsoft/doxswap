@@ -110,6 +110,16 @@ class FormatRegistry
     }
 
     /**
+     * Get all formats.
+     *
+     * @return array
+     */
+    public function getAllFormats(): array
+    {
+        return $this->formats;
+    }
+
+    /**
      * Check if a conversion is supported.
      *
      * @param \Blaspsoft\Doxswap\Contracts\ConvertibleFormat $inputFormat
