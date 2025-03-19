@@ -46,7 +46,7 @@ return [
     | - both: Both the input and output files are deleted.
     |
     */
-    'cleanup_strategy' => env('DOXSWAP_CLEANUP_STRATEGY', 'none'),
+    'cleanup_strategy' => 'none',
 
     /*
     |--------------------------------------------------------------------------
@@ -122,13 +122,11 @@ return [
             |
             */
             'supported_conversions' => [
-                'bmp' => ['pdf', 'jpg', 'png'],
                 'tiff' => ['pdf', 'jpg', 'png'],
             ],
 
 
             'mime_types' => [
-                'bmp' => 'image/bmp',
                 'tiff' => 'image/tiff',
             ]
 
