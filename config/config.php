@@ -122,15 +122,6 @@ return [
             |
             */
             'supported_conversions' => [
-                //'doc' => ['pdf', 'docx', 'odt', 'rtf', 'txt', 'html', 'epub', 'xml'],
-                //'docx' => ['pdf', 'odt', 'rtf', 'txt', 'html', 'epub', 'xml'],
-                //'odt' => ['pdf', 'docx', 'doc', 'txt', 'rtf', 'html', 'xml'],
-                //'rtf' => ['pdf', 'docx', 'odt', 'txt', 'html', 'xml'],
-                //'txt' => ['pdf', 'docx', 'odt', 'html', 'xml'],
-                //'html' => ['pdf', 'odt', 'txt'],
-                //'xml' => ['pdf', 'docx', 'odt', 'txt', 'html'],
-                'csv' => ['pdf', 'xlsx', 'ods', 'html'],
-                'xlsx' => ['pdf', 'ods', 'csv', 'html'],
                 'ods' => ['pdf', 'xlsx', 'xls', 'csv', 'html'],
                 'xls' => ['pdf', 'ods', 'csv', 'html'],
                 'pptx' => ['pdf', 'odp'],
@@ -143,24 +134,8 @@ return [
                 'tiff' => ['pdf', 'jpg', 'png'],
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | MIME Types
-            |--------------------------------------------------------------------------
-            |
-            | Here you may specify the MIME types for the supported file extensions.
-            |
-            */
+
             'mime_types' => [
-                //'doc' => 'application/msword',
-                //'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                //'odt' => 'application/vnd.oasis.opendocument.text',
-                //'rtf' => 'text/rtf',
-                //'txt' => 'text/plain',
-                //'html' => 'text/html',
-                //'xml' => 'text/xml',
-                'csv' => 'text/csv',
-                'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'xls' => 'application/vnd.ms-excel',
                 'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
                 'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
