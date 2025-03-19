@@ -122,8 +122,6 @@ return [
             |
             */
             'supported_conversions' => [
-                'pptx' => ['pdf', 'odp'],
-                'ppt' => ['pdf', 'odp'],
                 'odp' => ['pdf', 'pptx', 'ppt'],
                 'svg' => ['pdf', 'png', 'jpg', 'tiff'],
                 'jpg' => ['pdf', 'png', 'svg'],
@@ -134,8 +132,6 @@ return [
 
 
             'mime_types' => [
-                'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                'ppt' => 'application/vnd.ms-powerpoint',
                 'odp' => 'application/vnd.oasis.opendocument.presentation',
                 'svg' => 'image/svg+xml',
                 'jpg' => 'image/jpeg',

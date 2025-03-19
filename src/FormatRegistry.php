@@ -16,6 +16,7 @@ use Blaspsoft\Doxswap\Formats\XlsFormat;
 use Blaspsoft\Doxswap\Formats\XlsxFormat;
 use Blaspsoft\Doxswap\Formats\OdsFormat;
 use Blaspsoft\Doxswap\Formats\PptxFormat;
+use Blaspsoft\Doxswap\Formats\PptFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
@@ -67,6 +68,8 @@ class FormatRegistry
         $this->register(new OdsFormat());
 
         $this->register(new PptxFormat());
+
+        $this->register(new PptFormat());
     }
 
     /**
