@@ -122,14 +122,12 @@ return [
             |
             */
             'supported_conversions' => [
-                'png' => ['pdf', 'jpg', 'svg'],
                 'bmp' => ['pdf', 'jpg', 'png'],
                 'tiff' => ['pdf', 'jpg', 'png'],
             ],
 
 
             'mime_types' => [
-                'png' => 'image/png',
                 'bmp' => 'image/bmp',
                 'tiff' => 'image/tiff',
             ]
