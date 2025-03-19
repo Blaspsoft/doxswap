@@ -122,7 +122,6 @@ return [
             |
             */
             'supported_conversions' => [
-                'ods' => ['pdf', 'xlsx', 'xls', 'csv', 'html'],
                 'xls' => ['pdf', 'ods', 'csv', 'html'],
                 'pptx' => ['pdf', 'odp'],
                 'ppt' => ['pdf', 'odp'],
@@ -137,7 +136,6 @@ return [
 
             'mime_types' => [
                 'xls' => 'application/vnd.ms-excel',
-                'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
                 'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
                 'ppt' => 'application/vnd.ms-powerpoint',
                 'odp' => 'application/vnd.oasis.opendocument.presentation',
