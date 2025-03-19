@@ -74,7 +74,7 @@ class FormatRegistryTest extends TestCase
         $this->formatRegistry->convert('test.doc', 'unknown');
     }
 
-    /*public function testConvertThrowsExceptionForUnsupportedMimeType()
+    public function testConvertThrowsExceptionForUnsupportedMimeType()
     {
         Storage::disk('local')->put('test.doc', 'dummy content');
 
@@ -83,5 +83,5 @@ class FormatRegistryTest extends TestCase
 
         File::shouldReceive('mimeType')->andReturn('invalid/mime-type');
         $this->formatRegistry->convert('test.doc', 'pdf');
-    }   */
+    }
 }
