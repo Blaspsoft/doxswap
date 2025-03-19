@@ -10,6 +10,7 @@ use Blaspsoft\Doxswap\Formats\RtfFormat;
 use Blaspsoft\Doxswap\Formats\DocFormat;
 use Blaspsoft\Doxswap\Formats\DocxFormat;
 use Blaspsoft\Doxswap\Formats\TxtFormat;
+use Blaspsoft\Doxswap\Formats\HtmlFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
@@ -49,6 +50,8 @@ class FormatRegistry
         $this->register(new RtfFormat());
 
         $this->register(new TxtFormat());
+
+        $this->register(new HtmlFormat());
     }
 
     /**
