@@ -3,9 +3,6 @@
 namespace Blaspsoft\Doxswap;
 
 use Blaspsoft\Doxswap\ConversionCleanup;
-use Blaspsoft\Doxswap\Strategies\Pandoc;
-use Blaspsoft\Doxswap\Strategies\LibreOffice;
-use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 
 class Converter
 {
@@ -15,13 +12,6 @@ class Converter
      * @var \Blaspsoft\Doxswap\Contracts\ConvertibleFormat
      */
     protected FormatRegistry $formatRegistry;
-
-    /**
-     * The file naming service.
-     *
-     * @var \Blaspsoft\Doxswap\FileHandler
-     */
-    protected FileHandler $fileHandler; 
 
     /**
      * The cleanup to use for the conversion.
@@ -53,7 +43,7 @@ class Converter
     {
         $outputFile = $this->formatRegistry->convert($inputFile, $toFormat);
 
-        $outputFile = $this->fileHandler->rename($outputFile);
+        $outputFile = Filename::rename($outputFile);
 
         $this->cleanup->cleanup($inputFile, $outputFile);
 

@@ -52,11 +52,11 @@ class DocxFormat implements ConvertibleFormat
      * Convert the format to a new format.
      *
      * @param string $inputFile
-     * @param string $outputFile
+     * @param string $toFormat
      * @return string
      */
     public function convert(string $inputFile, string $toFormat): string
     {
-        return $this->getDriver()->convert($inputFile, $toFormat);
+        return $this->getDriver()->convert($inputFile, $this->getName(), $toFormat);
     }
 }

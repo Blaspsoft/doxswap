@@ -12,5 +12,5 @@ interface ConvertibleFormat
 
     public function getDriver(): ConversionStrategy;
 
-    public function convert(string $inputFile, string $outputFile): string;
+    public function convert(string $inputFile, string $toFormat): string;
 }

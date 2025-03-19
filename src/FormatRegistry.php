@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Formats\DocFormat;
 use Blaspsoft\Doxswap\Formats\DocxFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
+use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
+use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
+use Blaspsoft\Doxswap\Exceptions\UnsupportedConversionException;
 
 class FormatRegistry
 {
@@ -91,26 +94,26 @@ class FormatRegistry
      * @param string $inputFile
      * @param string $toFormat
      * @return string
+     * @throws \Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException
+     * @throws \Blaspsoft\Doxswap\Exceptions\UnsupportedConversionException
+     * @throws \Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException
      */
     public function convert(string $inputFile, string $toFormat): string
     {
-        // Check if the input file exists.
         if (!Storage::disk($this->inputDisk)->exists($inputFile)) {
-            throw new \Exception("Input file not found.");
+            throw new InputFileNotFoundException($inputFile);
         }
 
         $inputFile = Storage::disk($this->inputDisk)->path($inputFile);
 
         $inputFormat = $this->getFormat(pathinfo($inputFile, PATHINFO_EXTENSION));
 
-        // Check if the conversion is supported.
         if (!$this->isSupportedConversion($inputFormat, $toFormat)) {
-            throw new \Exception("Conversion from $inputFormat to $toFormat is not supported.");
+            throw new UnsupportedConversionException($inputFormat->getName(), $toFormat);
         }
 
-        // Check mime type.
         if (!$this->isSupportedMimeType($inputFormat, File::mimeType($inputFile))) {
-            throw new \Exception("Conversion from $inputFormat to $toFormat is not supported.");
+            throw new UnsupportedMimeTypeException($inputFormat->getName(), $toFormat);
         }
 
         return $inputFormat->convert($inputFile, $toFormat);

@@ -2,7 +2,6 @@
 
 namespace Blaspsoft\Doxswap\Formats;
 
-use Blaspsoft\Doxswap\Strategies\Pandoc;
 use Blaspsoft\Doxswap\Strategies\LibreOffice;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
@@ -53,11 +52,11 @@ class DocFormat implements ConvertibleFormat
      * Convert the format to a new format.
      *
      * @param string $inputFile
-     * @param string $outputFile
+     * @param string $toFormat
      * @return string
      */
-    public function convert(string $inputFile, string $outputFile): string
+    public function convert(string $inputFile, string $toFormat): string
     {
-        return $this->getDriver()->convert($inputFile, $outputFile);
+        return $this->getDriver()->convert($inputFile, $this->getName(), $toFormat);
     }
 }

@@ -38,7 +38,9 @@ class LibreOffice implements ConversionStrategy
     public function __construct()
     {
         $this->path = config('doxswap.drivers.libreoffice.path');
+
         $this->inputDisk = config('doxswap.input_disk');
+
         $this->outputDisk = config('doxswap.output_disk');
     }
 
@@ -46,10 +48,11 @@ class LibreOffice implements ConversionStrategy
      * Convert a file to a new format.
      *
      * @param string $inputFile
-     * @param string $outputFile
+     * @param string $fromFormat
+     * @param string $toFormat
      * @return string
      */
-    public function convert(string $inputFile, string $toFormat): string
+    public function convert(string $inputFile, string $fromFormat, string $toFormat): string
     {
         $command = [
             $this->path, // Path to the LibreOffice binary
@@ -66,6 +69,6 @@ class LibreOffice implements ConversionStrategy
             throw new ProcessFailedException($process);
         }
 
-        return 'test';
+        return Storage::disk($this->outputDisk)->path(str_replace($fromFormat, $toFormat, basename($inputFile)));
     }
 }

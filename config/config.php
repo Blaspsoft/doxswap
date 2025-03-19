@@ -72,7 +72,7 @@ return [
         | - timestamp: A timestamp is generated.
         |
         */
-        'strategy' => env('DOXSWAP_FILENAME_STRATEGY', 'original'),
+        'strategy' => 'original',
 
         /*
         |--------------------------------------------------------------------------

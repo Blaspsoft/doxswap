@@ -58,8 +58,7 @@ class Doxswap
 
         $this->toFormat = $toFormat;
 
-        $this->outputFile = $this->converter->convert($this->inputFile, $this->toFormat);
-
+        return $this->converter->convert($this->inputFile, $this->toFormat);
         return $this;
     }
 }
