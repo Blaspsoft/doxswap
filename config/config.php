@@ -122,9 +122,9 @@ return [
             |
             */
             'supported_conversions' => [
-                'doc' => ['pdf', 'docx', 'odt', 'rtf', 'txt', 'html', 'epub', 'xml'],
-                'docx' => ['pdf', 'odt', 'rtf', 'txt', 'html', 'epub', 'xml'],
-                'odt' => ['pdf', 'docx', 'doc', 'txt', 'rtf', 'html', 'xml'],
+                //'doc' => ['pdf', 'docx', 'odt', 'rtf', 'txt', 'html', 'epub', 'xml'],
+                //'docx' => ['pdf', 'odt', 'rtf', 'txt', 'html', 'epub', 'xml'],
+                //'odt' => ['pdf', 'docx', 'doc', 'txt', 'rtf', 'html', 'xml'],
                 'rtf' => ['pdf', 'docx', 'odt', 'txt', 'html', 'xml'],
                 'txt' => ['pdf', 'docx', 'odt', 'html', 'xml'],
                 'html' => ['pdf', 'odt', 'txt'],
@@ -152,9 +152,9 @@ return [
             |
             */
             'mime_types' => [
-                'doc' => 'application/msword',
-                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'odt' => 'application/vnd.oasis.opendocument.text',
+                //'doc' => 'application/msword',
+                //'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                //'odt' => 'application/vnd.oasis.opendocument.text',
                 'rtf' => 'text/rtf',
                 'txt' => 'text/plain',
                 'html' => 'text/html',
