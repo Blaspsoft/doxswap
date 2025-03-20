@@ -22,6 +22,7 @@ use Blaspsoft\Doxswap\Formats\SvgFormat;
 use Blaspsoft\Doxswap\Formats\JpgFormat;
 use Blaspsoft\Doxswap\Formats\PngFormat;
 use Blaspsoft\Doxswap\Formats\BmpFormat;
+use Blaspsoft\Doxswap\Formats\CsvFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
@@ -86,6 +87,8 @@ class FormatRegistry
         $this->register(new PngFormat());
 
         $this->register(new BmpFormat());
+
+        $this->register(new CsvFormat());
     }
 
     /**
