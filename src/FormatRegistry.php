@@ -2,32 +2,33 @@
 
 namespace Blaspsoft\Doxswap;
 
+use finfo;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Blaspsoft\Doxswap\Formats\OdtFormat;
-use Blaspsoft\Doxswap\Formats\RtfFormat;
-use Blaspsoft\Doxswap\Formats\DocFormat;
-use Blaspsoft\Doxswap\Formats\DocxFormat;
-use Blaspsoft\Doxswap\Formats\TxtFormat;
-use Blaspsoft\Doxswap\Formats\HtmlFormat;
-use Blaspsoft\Doxswap\Formats\XmlFormat;
-use Blaspsoft\Doxswap\Formats\XlsFormat;
-use Blaspsoft\Doxswap\Formats\XlsxFormat;
-use Blaspsoft\Doxswap\Formats\OdsFormat;
-use Blaspsoft\Doxswap\Formats\PptxFormat;
-use Blaspsoft\Doxswap\Formats\PptFormat;
-use Blaspsoft\Doxswap\Formats\OdpFormat;
-use Blaspsoft\Doxswap\Formats\SvgFormat;
-use Blaspsoft\Doxswap\Formats\JpgFormat;
-use Blaspsoft\Doxswap\Formats\PngFormat;
 use Blaspsoft\Doxswap\Formats\BmpFormat;
 use Blaspsoft\Doxswap\Formats\CsvFormat;
+use Blaspsoft\Doxswap\Formats\DocFormat;
+use Blaspsoft\Doxswap\Formats\JpgFormat;
+use Blaspsoft\Doxswap\Formats\OdpFormat;
+use Blaspsoft\Doxswap\Formats\OdsFormat;
+use Blaspsoft\Doxswap\Formats\OdtFormat;
+use Blaspsoft\Doxswap\Formats\PngFormat;
+use Blaspsoft\Doxswap\Formats\PptFormat;
+use Blaspsoft\Doxswap\Formats\RtfFormat;
+use Blaspsoft\Doxswap\Formats\SvgFormat;
+use Blaspsoft\Doxswap\Formats\TxtFormat;
+use Blaspsoft\Doxswap\Formats\XlsFormat;
+use Blaspsoft\Doxswap\Formats\XmlFormat;
+use Blaspsoft\Doxswap\Formats\DocxFormat;
+use Blaspsoft\Doxswap\Formats\HtmlFormat;
+use Blaspsoft\Doxswap\Formats\PptxFormat;
+use Blaspsoft\Doxswap\Formats\XlsxFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedConversionException;
-use Illuminate\Support\Facades\Log;
 
 class FormatRegistry
 {
@@ -171,7 +172,7 @@ class FormatRegistry
             throw new UnsupportedConversionException($inputFormat->getName(), $toFormat);
         }
 
-        if (!$this->isSupportedMimeType($inputFormat, File::mimeType($inputFile))) {
+        if (!$this->isSupportedMimeType($inputFormat, $inputFile)) {
             throw new UnsupportedMimeTypeException($inputFormat->getName(), $toFormat);
         }
 
