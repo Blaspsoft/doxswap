@@ -149,6 +149,28 @@ class FormatRegistry
     }
 
     /**
+     * Detect the mime type of a zip file.
+     *
+     * @param string $inputFile
+     * @return string
+     */
+    protected function detectZipBasedMimeType(string $inputFile): string
+    {
+        $zip = new \ZipArchive();
+    
+        if ($zip->open($inputFile) === TRUE) {
+            $mimetype = $zip->getFromName('mimetype');
+            $zip->close();
+
+            if ($mimetype !== false) {
+                return trim($mimetype);
+            }
+        }
+
+        return "application/zip";
+    }
+
+    /**
      * Convert a file to a new format.
      *
      * @param string $inputFile
@@ -172,7 +194,13 @@ class FormatRegistry
             throw new UnsupportedConversionException($inputFormat->getName(), $toFormat);
         }
 
-        if (!$this->isSupportedMimeType($inputFormat, $inputFile)) {
+        $mimeType = File::mimeType($inputFile);
+
+        if ($mimeType === 'application/zip') {
+            $mimeType = $this->detectZipBasedMimeType($inputFile);
+        }
+
+        if (!$this->isSupportedMimeType($inputFormat, $mimeType)) {
             throw new UnsupportedMimeTypeException($inputFormat->getName(), $toFormat);
         }
 
