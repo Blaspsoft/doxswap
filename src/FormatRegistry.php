@@ -25,6 +25,7 @@ use Blaspsoft\Doxswap\Formats\DocxFormat;
 use Blaspsoft\Doxswap\Formats\HtmlFormat;
 use Blaspsoft\Doxswap\Formats\PptxFormat;
 use Blaspsoft\Doxswap\Formats\XlsxFormat;
+use Blaspsoft\Doxswap\Formats\TiffFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
@@ -90,6 +91,8 @@ class FormatRegistry
         $this->register(new BmpFormat());
 
         $this->register(new CsvFormat());
+
+        $this->register(new TiffFormat());
     }
 
     /**
