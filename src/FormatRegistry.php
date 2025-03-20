@@ -141,7 +141,6 @@ class FormatRegistry
      */
     public function isSupportedMimeType(ConvertibleFormat $format, string $mimeType): bool
     {
-        Log::info("Checking if mime type is supported: " . $format->getMimeType() . " and " . $mimeType);
         return Str::is($format->getMimeType(), $mimeType);
     }
 
@@ -168,7 +167,7 @@ class FormatRegistry
         if (!$this->isSupportedConversion($inputFormat, $toFormat)) {
             throw new UnsupportedConversionException($inputFormat->getName(), $toFormat);
         }
-       echo("Format Mime Type: " . $inputFormat->getMimeType() . " InputFile Mime Type: " . File::mimeType($inputFile));
+
         if (!$this->isSupportedMimeType($inputFormat, File::mimeType($inputFile))) {
             throw new UnsupportedMimeTypeException($inputFormat->getName(), $toFormat);
         }
