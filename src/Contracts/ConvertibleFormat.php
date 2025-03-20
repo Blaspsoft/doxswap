@@ -6,7 +6,7 @@ interface ConvertibleFormat
 {
     public function getName(): string;
 
-    public function getMimeType(): string;
+    public function getMimeTypes(): array;
 
     public function getSupportedConversions(): array;
 

@@ -19,13 +19,13 @@ class HtmlFormat implements ConvertibleFormat
     }
 
     /**
-     * Get the MIME type of the format.
+     * Get the MIME types of the format.
      *
-     * @return string
+     * @return array
      */
-    public function getMimeType(): string
+    public function getMimeTypes(): array
     {
-        return 'text/html';
+        return ['text/html', 'application/xhtml+xml', 'application/x-html', 'text/plain'];
     }
 
     /**

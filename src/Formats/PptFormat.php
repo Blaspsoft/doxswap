@@ -19,13 +19,13 @@ class PptFormat implements ConvertibleFormat
     }
 
     /**
-     * Get the MIME type of the format.
+     * Get the MIME types of the format.
      *
-     * @return string
+     * @return array
      */
-    public function getMimeType(): string
+    public function getMimeTypes(): array
     {
-        return 'application/vnd.ms-powerpoint';
+        return ['application/vnd.ms-powerpoint', 'application/x-mspowerpoint', 'application/powerpoint', 'application/x-powerpoint'];
     }
 
     /**

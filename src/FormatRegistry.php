@@ -2,26 +2,27 @@
 
 namespace Blaspsoft\Doxswap;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Blaspsoft\Doxswap\Formats\OdtFormat;
-use Blaspsoft\Doxswap\Formats\RtfFormat;
-use Blaspsoft\Doxswap\Formats\DocFormat;
-use Blaspsoft\Doxswap\Formats\DocxFormat;
-use Blaspsoft\Doxswap\Formats\TxtFormat;
-use Blaspsoft\Doxswap\Formats\HtmlFormat;
-use Blaspsoft\Doxswap\Formats\XmlFormat;
-use Blaspsoft\Doxswap\Formats\XlsFormat;
-use Blaspsoft\Doxswap\Formats\XlsxFormat;
-use Blaspsoft\Doxswap\Formats\OdsFormat;
-use Blaspsoft\Doxswap\Formats\PptxFormat;
-use Blaspsoft\Doxswap\Formats\PptFormat;
-use Blaspsoft\Doxswap\Formats\OdpFormat;
-use Blaspsoft\Doxswap\Formats\SvgFormat;
-use Blaspsoft\Doxswap\Formats\JpgFormat;
-use Blaspsoft\Doxswap\Formats\PngFormat;
 use Blaspsoft\Doxswap\Formats\BmpFormat;
+use Blaspsoft\Doxswap\Formats\CsvFormat;
+use Blaspsoft\Doxswap\Formats\DocFormat;
+use Blaspsoft\Doxswap\Formats\JpgFormat;
+use Blaspsoft\Doxswap\Formats\OdpFormat;
+use Blaspsoft\Doxswap\Formats\OdsFormat;
+use Blaspsoft\Doxswap\Formats\OdtFormat;
+use Blaspsoft\Doxswap\Formats\PngFormat;
+use Blaspsoft\Doxswap\Formats\PptFormat;
+use Blaspsoft\Doxswap\Formats\RtfFormat;
+use Blaspsoft\Doxswap\Formats\SvgFormat;
+use Blaspsoft\Doxswap\Formats\TxtFormat;
+use Blaspsoft\Doxswap\Formats\XlsFormat;
+use Blaspsoft\Doxswap\Formats\XmlFormat;
+use Blaspsoft\Doxswap\Formats\DocxFormat;
+use Blaspsoft\Doxswap\Formats\HtmlFormat;
+use Blaspsoft\Doxswap\Formats\PptxFormat;
+use Blaspsoft\Doxswap\Formats\XlsxFormat;
+use Blaspsoft\Doxswap\Formats\TiffFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
@@ -85,6 +86,10 @@ class FormatRegistry
         $this->register(new PngFormat());
 
         $this->register(new BmpFormat());
+
+        $this->register(new CsvFormat());
+
+        $this->register(new TiffFormat());
     }
 
     /**
@@ -110,6 +115,16 @@ class FormatRegistry
     }
 
     /**
+     * Get all formats.
+     *
+     * @return array
+     */
+    public function getAllFormats(): array
+    {
+        return $this->formats;
+    }
+
+    /**
      * Check if a conversion is supported.
      *
      * @param \Blaspsoft\Doxswap\Contracts\ConvertibleFormat $inputFormat
@@ -130,7 +145,29 @@ class FormatRegistry
      */
     public function isSupportedMimeType(ConvertibleFormat $format, string $mimeType): bool
     {
-        return Str::is($format->getMimeType(), $mimeType);
+        return in_array($mimeType, $format->getMimeTypes());
+    }
+
+    /**
+     * Detect the mime type of a zip file.
+     *
+     * @param string $inputFile
+     * @return string
+     */
+    protected function detectZipBasedMimeType(string $inputFile): string
+    {
+        $zip = new \ZipArchive();
+    
+        if ($zip->open($inputFile) === TRUE) {
+            $mimetype = $zip->getFromName('mimetype');
+            $zip->close();
+
+            if ($mimetype !== false) {
+                return trim($mimetype);
+            }
+        }
+
+        return "application/zip";
     }
 
     /**
@@ -157,7 +194,13 @@ class FormatRegistry
             throw new UnsupportedConversionException($inputFormat->getName(), $toFormat);
         }
 
-        if (!$this->isSupportedMimeType($inputFormat, File::mimeType($inputFile))) {
+        $mimeType = File::mimeType($inputFile);
+
+        if ($mimeType === 'application/zip') {
+            $mimeType = $this->detectZipBasedMimeType($inputFile);
+        }
+
+        if (!$this->isSupportedMimeType($inputFormat, $mimeType)) {
             throw new UnsupportedMimeTypeException($inputFormat->getName(), $toFormat);
         }
 

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Formats\DocFormat;
 use Blaspsoft\Doxswap\Formats\DocxFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
-use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
 
 class FormatRegistryTest extends TestCase
 {
@@ -84,5 +83,5 @@ class FormatRegistryTest extends TestCase
 
         File::shouldReceive('mimeType')->andReturn('invalid/mime-type');
         $this->formatRegistry->convert('test.doc', 'pdf');
-    }   
+    }
 }

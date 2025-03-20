@@ -19,13 +19,13 @@ class OdtFormat implements ConvertibleFormat
     }
 
     /**
-     * Get the MIME type of the format.
+     * Get the MIME types of the format.
      *
-     * @return string
+     * @return array
      */
-    public function getMimeType(): string
+    public function getMimeTypes(): array
     {
-        return 'application/vnd.oasis.opendocument.text';
+        return ['application/vnd.oasis.opendocument.text', 'application/x-vnd.oasis.opendocument.text', 'application/x-odt'];
     }
 
     /**
