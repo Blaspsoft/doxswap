@@ -148,6 +148,7 @@ class FormatRegistry
      */
     public function isSupportedMimeType(ConvertibleFormat $format, string $mimeType): bool
     {
+        echo "The input mime type is: " . $mimeType . " | The format mime type is: " . $format->getMimeType() . "\n";
         return Str::is($format->getMimeType(), $mimeType);
     }
 
