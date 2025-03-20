@@ -2,9 +2,6 @@
 
 namespace Blaspsoft\Doxswap;
 
-use finfo;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Formats\BmpFormat;
@@ -148,8 +145,7 @@ class FormatRegistry
      */
     public function isSupportedMimeType(ConvertibleFormat $format, string $mimeType): bool
     {
-        echo "The input mime type is: " . $mimeType . " | The format mime type is: " . $format->getMimeType() . "\n";
-        return Str::is($format->getMimeType(), $mimeType);
+        return in_array($mimeType, $format->getMimeTypes());
     }
 
     /**

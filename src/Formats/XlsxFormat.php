@@ -19,13 +19,13 @@ class XlsxFormat implements ConvertibleFormat
     }
 
     /**
-     * Get the MIME type of the format.
+     * Get the MIME types of the format.
      *
-     * @return string
+     * @return array
      */
-    public function getMimeType(): string
+    public function getMimeTypes(): array
     {
-        return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        return ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel.sheet.macroEnabled.12', 'application/x-xlsx', 'application/vnd.ms-excel', 'application/octet-stream'];
     }
 
     /**

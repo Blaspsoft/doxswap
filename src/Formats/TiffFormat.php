@@ -19,13 +19,13 @@ class TiffFormat implements ConvertibleFormat
     }
 
     /**
-     * Get the MIME type of the format.
+     * Get the MIME types of the format.
      *
-     * @return string
+     * @return array
      */
-    public function getMimeType(): string
+    public function getMimeTypes(): array
     {
-        return 'image/tiff';
+        return ['image/tiff', 'image/x-tiff', 'image/tif', 'image/x-tif'];
     }
 
     /**

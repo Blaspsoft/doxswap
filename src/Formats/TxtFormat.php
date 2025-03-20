@@ -19,13 +19,13 @@ class TxtFormat implements ConvertibleFormat
     }
 
     /**
-     * Get the MIME type of the format.
+     * Get the MIME types of the format.
      *
-     * @return string
+     * @return array
      */
-    public function getMimeType(): string
+    public function getMimeTypes(): array
     {
-        return 'text/plain';
+        return ['text/plain', 'text/x-plain', 'text/x-txt', 'text/x-text'];
     }
 
     /**
