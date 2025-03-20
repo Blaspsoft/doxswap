@@ -46,6 +46,7 @@ jobs:
           echo "APP_KEY=$(php artisan key:generate --show)" > .env
           echo "APP_ENV=testing" >> .env
           echo "DB_CONNECTION=sqlite" >> .env
+          echo "LIBREOFFICE_PATH=/usr/bin/soffice" >> .env
 
       # Step 8: Run Unit tests
       - name: Run Unit tests
