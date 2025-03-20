@@ -10,33 +10,47 @@ jobs:
       # Step 1: Check out the repository
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       # Step 2: Set up PHP
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
-          extensions: mbstring, dom, zip, fileinfo, bcmath, ctype, json, openssl, pdo, pdo_mysql, tokenizer, xml
+          extensions: mbstring, dom, zip, fileinfo
 
-      # Step 3: Install LibreOffice (Required for Conversion)
+      # Step 3: Set up Git LFS
+      - name: Set up Git LFS
+        run: |
+          git lfs install
+          git lfs pull
+
+      # Step 4: List files in the repository
+      - name: List files
+        run: |
+          ls -lh tests/Stubs/
+          file --mime-type tests/Stubs/*
+
+      # Step 5: Install LibreOffice (Required for Conversion)
       - name: Install LibreOffice
         run: sudo apt-get update && sudo apt-get install -y libreoffice
 
-      # Step 4: Install Composer dependencies
+      # Step 6: Install Composer dependencies
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
-      # Step 5: Set up Laravel environment (if needed)
+      # Step 7: Set up Laravel environment (if needed)
       - name: Set up Laravel environment
         run: |
           echo "APP_KEY=$(php artisan key:generate --show)" > .env
           echo "APP_ENV=testing" >> .env
           echo "DB_CONNECTION=sqlite" >> .env
 
-      # Step 6: Run Unit tests
+      # Step 8: Run Unit tests
       - name: Run Unit tests
         run: php ./vendor/bin/phpunit --testsuite=Unit
 
-      # Step 7: Run Integration tests (requires LibreOffice)
+      # Step 9: Run Integration tests (requires LibreOffice)
       - name: Run Integration tests
         run: php ./vendor/bin/phpunit --testsuite=Integration
