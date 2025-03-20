@@ -53,4 +53,4 @@ jobs:
 
       # Step 9: Run Integration tests (requires LibreOffice)
       - name: Run Integration tests
-        run: php ./vendor/bin/phpunit --testsuite=Integration
+        run: php ./vendor/bin/phpunit --testsuite=Integration --testdox
