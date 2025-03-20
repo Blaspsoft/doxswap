@@ -35,7 +35,7 @@ class XmlFormat implements ConvertibleFormat
      */
     public function getSupportedConversions(): array
     {
-        return ['pdf', 'docx', 'odt', 'txt', 'html'];
+        return ['pdf', 'odt', 'txt', 'html'];
     }
 
     /**
