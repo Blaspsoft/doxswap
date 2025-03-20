@@ -25,7 +25,7 @@ class BmpFormat implements ConvertibleFormat
      */
     public function getMimeTypes(): array
     {
-        return ['image/bmp', 'image/x-bmp', 'image/x-bitmap', 'image/x-xbitmap', 'image/x-win-bitmap'];
+        return ['image/bmp', 'image/x-bmp', 'image/x-bitmap', 'image/x-xbitmap', 'image/x-win-bitmap', 'image/x-ms-bmp'];
     }
 
     /**
