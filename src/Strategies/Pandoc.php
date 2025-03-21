@@ -65,6 +65,7 @@ class Pandoc implements ConversionStrategy
             '--pdf-engine=xelatex',
             '-V', 'geometry:margin=1in',
             '-V', 'fontsize=12pt',
+            '-V', 'mainfont=Noto Sans',
             '-V', 'hyphenation=none',
             '--columns=120',
             $inputFile,

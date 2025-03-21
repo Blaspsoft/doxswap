@@ -54,11 +54,18 @@ class Doxswap
      */
     public function convert(string $file, string $toFormat)
     {
+        $start = microtime(true);
+
         $this->inputFile = $file;
 
         $this->toFormat = $toFormat;
 
-        return $this->converter->convert($this->inputFile, $this->toFormat);
-        return $this;
+        $outputFile = $this->converter->convert($this->inputFile, $this->toFormat);
+        
+        $end = microtime(true);
+
+        $duration = $end - $start;
+
+        return new ConversionResult($this->inputFile, $outputFile, $this->toFormat, $duration);
     }
 }
