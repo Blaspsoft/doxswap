@@ -1,0 +1,26 @@
+\documentclass[$fontsize$]{article}
+
+% Font support
+\usepackage{fontspec}
+\setmainfont{$mainfont$}
+\newfontfamily\emojifont{$emojifont$}
+
+% Page layout
+\usepackage{geometry}
+\geometry{$geometry$}
+
+% Hyperlinks
+\usepackage{hyperref}
+
+% Title metadata
+\title{$title$}
+\author{$author$}
+\date{$date$}
+
+\begin{document}
+
+\maketitle
+
+$body$
+
+\end{document}

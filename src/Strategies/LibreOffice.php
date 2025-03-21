@@ -5,6 +5,7 @@ namespace Blaspsoft\Doxswap\Strategies;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
+use Blaspsoft\Doxswap\Exceptions\ConversionFailedException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class LibreOffice implements ConversionStrategy
@@ -54,6 +55,8 @@ class LibreOffice implements ConversionStrategy
      */
     public function convert(string $inputFile, string $fromFormat, string $toFormat): string
     {
+        $outputFile = Storage::disk($this->outputDisk)->path(str_replace($fromFormat, $toFormat, basename($inputFile)));
+
         $command = [
             $this->path, // Path to the LibreOffice binary
             '--headless', // Run in headless mode
@@ -69,6 +72,10 @@ class LibreOffice implements ConversionStrategy
             throw new ProcessFailedException($process);
         }
 
-        return Storage::disk($this->outputDisk)->path(str_replace($fromFormat, $toFormat, basename($inputFile)));
+        if (!Storage::disk($this->outputDisk)->exists(basename($outputFile))) {
+            throw new ConversionFailedException();
+        }
+
+        return $outputFile;
     }
 }
