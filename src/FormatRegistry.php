@@ -23,7 +23,6 @@ use Blaspsoft\Doxswap\Formats\HtmlFormat;
 use Blaspsoft\Doxswap\Formats\PptxFormat;
 use Blaspsoft\Doxswap\Formats\XlsxFormat;
 use Blaspsoft\Doxswap\Formats\TiffFormat;
-use Blaspsoft\Doxswap\Formats\MarkdownFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
@@ -91,8 +90,6 @@ class FormatRegistry
         $this->register(new CsvFormat());
 
         $this->register(new TiffFormat());
-
-        $this->register(new MarkdownFormat());
     }
 
     /**
@@ -183,7 +180,7 @@ class FormatRegistry
      * @throws \Blaspsoft\Doxswap\Exceptions\UnsupportedConversionException
      * @throws \Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException
      */
-    public function convert(string $inputFile, string $toFormat): string
+    public function convert(string $inputFile, string $toFormat): ConversionResult
     {
         if (!Storage::disk($this->inputDisk)->exists($inputFile)) {
             throw new InputFileNotFoundException($inputFile);

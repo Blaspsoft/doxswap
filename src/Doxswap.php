@@ -50,22 +50,10 @@ class Doxswap
      *
      * @param string $file The absolute path to the file to convert
      * @param string $toFormat The format to convert the file to
-     * @return self
+     * @return \Blaspsoft\Doxswap\ConversionResult
      */
-    public function convert(string $file, string $toFormat)
+    public function convert(string $file, string $toFormat): ConversionResult
     {
-        $start = microtime(true);
-
-        $this->inputFile = $file;
-
-        $this->toFormat = $toFormat;
-
-        $outputFile = $this->converter->convert($this->inputFile, $this->toFormat);
-        
-        $end = microtime(true);
-
-        $duration = $end - $start;
-
-        return new ConversionResult($this->inputFile, $outputFile, $this->toFormat, $duration);
+        return $this->converter->convert($file, $toFormat);
     }
 }

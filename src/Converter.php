@@ -37,12 +37,14 @@ class Converter
      *
      * @param string $inputFile
      * @param string $toFormat
-     * @return string
+     * @return \Blaspsoft\Doxswap\ConversionResult
      */
-    public function convert(string $inputFile, string $toFormat): string
+    public function convert(string $inputFile, string $toFormat): ConversionResult
     {
         $outputFile = $this->formatRegistry->convert($inputFile, $toFormat);
 
+        return $outputFile; // TODO: Need to find a place to put the rename feature
+        
         $outputFile = Filename::rename($outputFile);
 
         $this->cleanup->cleanup($inputFile, $outputFile);

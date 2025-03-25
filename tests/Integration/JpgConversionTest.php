@@ -39,4 +39,18 @@ class JpgConversionTest extends TestCase
         $this->converter->convert('test.jpg', 'svg');
         $this->assertTrue(Storage::disk('local')->exists('test.svg'));
     }
+
+    public function testJpgToTiffConversion()
+    {
+        Storage::disk('local')->put('test.jpg', file_get_contents(__DIR__ . '/../Stubs/sample.jpg'));
+        $this->converter->convert('test.jpg', 'tiff');
+        $this->assertTrue(Storage::disk('local')->exists('test.tiff'));
+    }
+
+    public function testJpgToBmpConversion()
+    {
+        Storage::disk('local')->put('test.jpg', file_get_contents(__DIR__ . '/../Stubs/sample.jpg'));
+        $this->converter->convert('test.jpg', 'bmp');
+        $this->assertTrue(Storage::disk('local')->exists('test.bmp'));
+    }
 }

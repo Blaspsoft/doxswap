@@ -5,18 +5,32 @@ namespace Blaspsoft\Doxswap;
 class ConversionResult
 {
     /**
+     * The input filename.
+     *
+     * @var string
+     */
+    public string $inputFilename;
+
+    /**
      * The input file.
      *
      * @var string
      */
-    public string $inputFile;
+    public string $inputFilePath;
+
+    /** 
+     * The output filename.
+     *
+     * @var string
+     */
+    public string $outputFilename;
 
     /**
      * The output file.
      *
      * @var string
      */
-    public string $outputFile;
+    public string $outputFilePath;
 
     /**
      * The format to convert the file to.
@@ -33,22 +47,59 @@ class ConversionResult
     public string $duration;
 
     /**
+     * The start time of the conversion.
+     *
+     * @var float
+     */
+    public float $startTime;
+
+    /**
+     * The end time of the conversion.
+     *
+     * @var float
+     */
+    public float $endTime;
+
+    /**
+     * The input disk.
+     *
+     * @var string
+     */
+    public string $inputDisk;
+
+    /**
+     * The output disk.
+     *
+     * @var string
+     */
+    public string $outputDisk;
+
+    /**
      * Create a new conversion result.
      *
      * @param string $inputFile
      * @param string $outputFile
      * @param string $toFormat
-     * @param float $duration
+     * @param float $startTime
+     * @param float $endTime
      */
-    public function __construct(string $inputFile, string $outputFile, string $toFormat, float $duration)
-    {
-        $this->inputFile = $inputFile;
-
-        $this->outputFile = $outputFile;
-
+    public function __construct(
+        string $inputFile, 
+        string $outputFile, 
+        string $toFormat, 
+        float $startTime,
+        float $endTime
+    ) {
+        $this->inputDisk = config('doxswap.input_disk');
+        $this->outputDisk = config('doxswap.output_disk');
+        $this->inputFilename = basename($inputFile);
+        $this->inputFilePath = $inputFile;
+        $this->outputFilename = basename($outputFile);
+        $this->outputFilePath = $outputFile;
         $this->toFormat = $toFormat;
-
-        $this->duration = $this->formatDuration($duration);
+        $this->startTime = $startTime;
+        $this->endTime = $endTime;
+        $this->duration = $this->formatDuration($endTime - $startTime);
     }
 
     /**

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
 use Blaspsoft\Doxswap\Exceptions\ConversionFailedException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Blaspsoft\Doxswap\ConversionResult;
 
 class LibreOffice implements ConversionStrategy
 {
@@ -51,11 +52,13 @@ class LibreOffice implements ConversionStrategy
      * @param string $inputFile
      * @param string $fromFormat
      * @param string $toFormat
-     * @return string
+     * @return \Blaspsoft\Doxswap\ConversionResult
      */
-    public function convert(string $inputFile, string $fromFormat, string $toFormat): string
+    public function convert(string $inputFile, string $fromFormat, string $toFormat): ConversionResult
     {
         $outputFile = Storage::disk($this->outputDisk)->path(str_replace($fromFormat, $toFormat, basename($inputFile)));
+
+        $startTime = (float) microtime(true);
 
         $command = [
             $this->path, // Path to the LibreOffice binary
@@ -68,6 +71,8 @@ class LibreOffice implements ConversionStrategy
         $process = new Process($command);
         $process->run();
 
+        $endTime = (float) microtime(true);
+
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
@@ -76,6 +81,12 @@ class LibreOffice implements ConversionStrategy
             throw new ConversionFailedException();
         }
 
-        return $outputFile;
+        return new ConversionResult(
+            inputFile: $inputFile,
+            outputFile: $outputFile,
+            toFormat: $toFormat,
+            startTime: $startTime,
+            endTime: $endTime
+        );
     }
 }

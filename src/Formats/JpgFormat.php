@@ -5,6 +5,8 @@ namespace Blaspsoft\Doxswap\Formats;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
 use Blaspsoft\Doxswap\Strategies\LibreOffice;
+use Blaspsoft\Doxswap\Strategies\ImageMagick;
+use Blaspsoft\Doxswap\ConversionResult;
 
 class JpgFormat implements ConvertibleFormat
 {
@@ -35,7 +37,7 @@ class JpgFormat implements ConvertibleFormat
      */
     public function getSupportedConversions(): array
     {
-        return ['pdf', 'png', 'svg'];
+        return ['pdf', 'png', 'svg', 'tiff', 'bmp'];
     }
 
     /**
@@ -43,9 +45,11 @@ class JpgFormat implements ConvertibleFormat
      *
      * @return \Blaspsoft\Doxswap\Contracts\ConversionStrategy
      */
-    public function getDriver(): ConversionStrategy
+    public function getDriver(?string $toFormat = null): ConversionStrategy
     {
-        return new LibreOffice();
+        return $toFormat === 'pdf' 
+            ? new LibreOffice() 
+            : new ImageMagick();
     }
 
     /**
@@ -53,10 +57,10 @@ class JpgFormat implements ConvertibleFormat
      *
      * @param string $inputFile
      * @param string $toFormat
-     * @return string
+     * @return \Blaspsoft\Doxswap\ConversionResult
      */
-    public function convert(string $inputFile, string $toFormat): string
+    public function convert(string $inputFile, string $toFormat): ConversionResult
     {
-        return $this->getDriver()->convert($inputFile, $this->getName(), $toFormat);
+        return $this->getDriver($toFormat)->convert($inputFile, $this->getName(), $toFormat);
     }
 }

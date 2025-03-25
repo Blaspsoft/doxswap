@@ -39,4 +39,18 @@ class TiffConversionTest extends TestCase
         $this->converter->convert('test.tiff', 'jpg');
         $this->assertTrue(Storage::disk('local')->exists('test.jpg'));
     }
+
+    public function testTiffToSvgConversion()
+    {
+        Storage::disk('local')->put('test.tiff', file_get_contents(__DIR__ . '/../Stubs/sample.tiff'));
+        $this->converter->convert('test.tiff', 'svg');
+        $this->assertTrue(Storage::disk('local')->exists('test.svg'));
+    }
+
+    public function testTiffToBmpConversion()
+    {
+        Storage::disk('local')->put('test.tiff', file_get_contents(__DIR__ . '/../Stubs/sample.tiff'));
+        $this->converter->convert('test.tiff', 'bmp');
+        $this->assertTrue(Storage::disk('local')->exists('test.bmp'));
+    }
 }

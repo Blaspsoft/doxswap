@@ -39,4 +39,18 @@ class PngConversionTest extends TestCase
         $this->converter->convert('test.png', 'svg');
         $this->assertTrue(Storage::disk('local')->exists('test.svg'));
     }
+
+    public function testPngToTiffConversion()
+    {
+        Storage::disk('local')->put('test.png', file_get_contents(__DIR__ . '/../Stubs/sample.png'));
+        $this->converter->convert('test.png', 'tiff');
+        $this->assertTrue(Storage::disk('local')->exists('test.tiff'));
+    }
+
+    public function testPngToBmpConversion()
+    {
+        Storage::disk('local')->put('test.png', file_get_contents(__DIR__ . '/../Stubs/sample.png'));
+        $this->converter->convert('test.png', 'bmp');
+        $this->assertTrue(Storage::disk('local')->exists('test.bmp'));
+    }
 }

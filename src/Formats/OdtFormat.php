@@ -4,6 +4,7 @@ namespace Blaspsoft\Doxswap\Formats;
 
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
+use Blaspsoft\Doxswap\ConversionResult;
 use Blaspsoft\Doxswap\Strategies\LibreOffice;
 
 class OdtFormat implements ConvertibleFormat
@@ -53,9 +54,9 @@ class OdtFormat implements ConvertibleFormat
      *
      * @param string $inputFile
      * @param string $toFormat
-     * @return string
+     * @return \Blaspsoft\Doxswap\ConversionResult
      */
-    public function convert(string $inputFile, string $toFormat): string
+    public function convert(string $inputFile, string $toFormat): ConversionResult
     {
         return $this->getDriver()->convert($inputFile, $this->getName(), $toFormat);
     }

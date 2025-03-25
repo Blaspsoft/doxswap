@@ -2,6 +2,8 @@
 
 namespace Blaspsoft\Doxswap\Contracts;
 
+use Blaspsoft\Doxswap\ConversionResult;
+
 interface ConversionStrategy
 {
     /**
@@ -10,7 +12,7 @@ interface ConversionStrategy
      * @param string $inputFile
      * @param string $fromFormat
      * @param string $toFormat
-     * @return string
+     * @return \Blaspsoft\Doxswap\ConversionResult
      */
-    public function convert(string $inputFile, string $fromFormat, string $toFormat): string;
+    public function convert(string $inputFile, string $fromFormat, string $toFormat): ConversionResult;
 }
