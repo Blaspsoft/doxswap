@@ -36,7 +36,7 @@ class Doxswap
     public function __construct()
     {
         $this->formatRegistry = new FormatRegistry();
-        
+
         $this->cleanup = new ConversionCleanup();
     }
 
@@ -49,19 +49,11 @@ class Doxswap
      */
     public function convert(string $file, string $toFormat): ConversionResult
     {
-        return $this->result = $this->formatRegistry->convert($file, $toFormat);
-    }
+        $this->result = $this->formatRegistry->convert($file, $toFormat);
 
-    /**
-     * Cleanup the result.
-     *
-     * @return void
-     */
-    public function cleanup(): void
-    {
-        if ($this->result) {
-            $this->cleanup->cleanup($this->result->inputFilePath, $this->result->outputFilePath);
-        }
+        $this->cleanup->cleanup($this->result->inputFilename);
+
+        return $this->result;
     }
 }
 

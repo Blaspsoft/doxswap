@@ -24,19 +24,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Cleanup Strategy
+    | Cleanup
     |--------------------------------------------------------------------------
     |
-    | Here you may specify the cleanup strategy to use.
-    |
-    | Supported strategies:
-    | - none: No cleanup is performed.
-    | - input: Only the input file is deleted.
-    | - output: Only the output file is deleted.
-    | - both: Both the input and output files are deleted.
+    | Here you may specify if the input file should be deleted after the conversion.
     |
     */
-    'cleanup_strategy' => 'none',
+    'perform_cleanup' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -98,11 +92,9 @@ return [
     |
     | Supported drivers:
     | - libreoffice: The LibreOffice driver.
-    | - pandoc: The Pandoc driver.
     |   
     */
     'drivers' => [
         'libreoffice_path' => env('LIBRE_OFFICE_PATH', '/usr/bin/soffice'),
-        'pandoc_path' => env('PANDOC_PATH', '/usr/bin/pandoc'),
     ],
 ];
