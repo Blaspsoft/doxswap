@@ -2,9 +2,12 @@
 
 namespace Blaspsoft\Doxswap\Strategies;
 
+use Blaspsoft\Doxswap\Filename;
 use Symfony\Component\Process\Process;
+use Blaspsoft\Doxswap\ConversionResult;
 use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
+use Blaspsoft\Doxswap\Exceptions\ConversionFailedException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class LibreOffice implements ConversionStrategy
@@ -50,10 +53,14 @@ class LibreOffice implements ConversionStrategy
      * @param string $inputFile
      * @param string $fromFormat
      * @param string $toFormat
-     * @return string
+     * @return \Blaspsoft\Doxswap\ConversionResult
      */
-    public function convert(string $inputFile, string $fromFormat, string $toFormat): string
+    public function convert(string $inputFile, string $fromFormat, string $toFormat): ConversionResult
     {
+        $outputFile = Storage::disk($this->outputDisk)->path(str_replace($fromFormat, $toFormat, basename($inputFile)));
+
+        $startTime = (float) microtime(true);
+
         $command = [
             $this->path, // Path to the LibreOffice binary
             '--headless', // Run in headless mode
@@ -65,10 +72,24 @@ class LibreOffice implements ConversionStrategy
         $process = new Process($command);
         $process->run();
 
+        $endTime = (float) microtime(true);
+
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
 
-        return Storage::disk($this->outputDisk)->path(str_replace($fromFormat, $toFormat, basename($inputFile)));
+        if (!Storage::disk($this->outputDisk)->exists(basename($outputFile))) {
+            throw new ConversionFailedException();
+        }
+
+        $outputFile = Filename::rename($outputFile);
+
+        return new ConversionResult(
+            inputFilePath: $inputFile,
+            outputFilePath: $outputFile,
+            toFormat: $toFormat,
+            startTime: $startTime,
+            endTime: $endTime
+        );
     }
 }

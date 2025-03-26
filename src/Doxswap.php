@@ -8,32 +8,25 @@ namespace Blaspsoft\Doxswap;
 class Doxswap
 {
     /**
-     * The input file.
+     * The format registry.
      *
-     * @var string
+     * @var \Blaspsoft\Doxswap\FormatRegistry
      */
-    public $inputFile;
+    protected FormatRegistry $formatRegistry;
 
     /**
-     * The output file.
+     * The cleanup.
      *
-     * @var string
+     * @var \Blaspsoft\Doxswap\ConversionCleanup
      */
-    public $outputFile;
+    protected ConversionCleanup $cleanup;
 
     /**
-     * The format to convert the file to.
+     * The result.
      *
-     * @var string
+     * @var \Blaspsoft\Doxswap\ConversionResult|null
      */
-    public $toFormat;
-
-    /**
-     * The converter.
-     *
-     * @var \Blaspsoft\Doxswap\Converter
-     */
-    protected $converter;
+    protected ?ConversionResult $result = null;
 
     /**
      * Create a new Doxswap instance.
@@ -42,7 +35,9 @@ class Doxswap
      */
     public function __construct()
     {
-        $this->converter = new Converter();
+        $this->formatRegistry = new FormatRegistry();
+
+        $this->cleanup = new ConversionCleanup();
     }
 
     /**
@@ -50,15 +45,15 @@ class Doxswap
      *
      * @param string $file The absolute path to the file to convert
      * @param string $toFormat The format to convert the file to
-     * @return self
+     * @return \Blaspsoft\Doxswap\ConversionResult
      */
-    public function convert(string $file, string $toFormat)
+    public function convert(string $file, string $toFormat): ConversionResult
     {
-        $this->inputFile = $file;
+        $this->result = $this->formatRegistry->convert($file, $toFormat);
 
-        $this->toFormat = $toFormat;
+        $this->cleanup->cleanup($this->result->inputFilename);
 
-        return $this->converter->convert($this->inputFile, $this->toFormat);
-        return $this;
+        return $this->result;
     }
 }
+

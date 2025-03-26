@@ -2,13 +2,13 @@
 
 namespace Blaspsoft\Doxswap\Tests\Integration;
 
-use Blaspsoft\Doxswap\Converter;
+use Blaspsoft\Doxswap\Doxswap;
 use Blaspsoft\Doxswap\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 
 class PptxConversionTest extends TestCase
 {
-    protected Converter $converter;
+    protected Doxswap $doxswap;
 
     protected function setUp(): void
     {
@@ -16,20 +16,20 @@ class PptxConversionTest extends TestCase
         
         Storage::fake('local');
 
-        $this->converter = new Converter();
+        $this->doxswap = new Doxswap();
     }
     
     public function testPptxToPdfConversion()
     {
         Storage::disk('local')->put('test.pptx', file_get_contents(__DIR__ . '/../Stubs/sample.pptx'));
-        $this->converter->convert('test.pptx', 'pdf');
+        $this->doxswap->convert('test.pptx', 'pdf');
         $this->assertTrue(Storage::disk('local')->exists('test.pdf'));
     }
 
     public function testPptxToOdpConversion()
     {
         Storage::disk('local')->put('test.pptx', file_get_contents(__DIR__ . '/../Stubs/sample.pptx'));
-        $this->converter->convert('test.pptx', 'odp');
+        $this->doxswap->convert('test.pptx', 'odp');
         $this->assertTrue(Storage::disk('local')->exists('test.odp'));
     }
 }

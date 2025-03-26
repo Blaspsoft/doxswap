@@ -2,6 +2,8 @@
 
 namespace Blaspsoft\Doxswap\Contracts;
 
+use Blaspsoft\Doxswap\ConversionResult;
+
 interface ConvertibleFormat
 {
     public function getName(): string;
@@ -12,5 +14,5 @@ interface ConvertibleFormat
 
     public function getDriver(): ConversionStrategy;
 
-    public function convert(string $inputFile, string $toFormat): string;
+    public function convert(string $inputFile, string $toFormat): ConversionResult;
 }

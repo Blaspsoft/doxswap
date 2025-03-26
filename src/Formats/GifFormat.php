@@ -5,9 +5,10 @@ namespace Blaspsoft\Doxswap\Formats;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
 use Blaspsoft\Doxswap\Strategies\LibreOffice;
+use Blaspsoft\Doxswap\Strategies\ImageMagick;
 use Blaspsoft\Doxswap\ConversionResult;
 
-class RtfFormat implements ConvertibleFormat
+class GifFormat implements ConvertibleFormat
 {
     /**
      * Get the name of the format.
@@ -16,7 +17,7 @@ class RtfFormat implements ConvertibleFormat
      */
     public function getName(): string
     {
-        return 'rtf';
+        return 'gif';
     }
 
     /**
@@ -26,7 +27,7 @@ class RtfFormat implements ConvertibleFormat
      */
     public function getMimeTypes(): array
     {
-        return ['text/rtf', 'application/rtf', 'application/x-rtf', 'text/richtext'];
+        return ['image/gif', 'image/x-gif'];
     }
 
     /**
@@ -36,7 +37,7 @@ class RtfFormat implements ConvertibleFormat
      */
     public function getSupportedConversions(): array
     {
-        return ['pdf', 'docx', 'odt', 'txt', 'html', 'xml'];
+        return ['pdf', 'png', 'jpg', 'tiff', 'bmp', 'webp', 'svg'];
     }
 
     /**
@@ -44,9 +45,11 @@ class RtfFormat implements ConvertibleFormat
      *
      * @return \Blaspsoft\Doxswap\Contracts\ConversionStrategy
      */
-    public function getDriver(): ConversionStrategy
+    public function getDriver(?string $toFormat = null): ConversionStrategy
     {
-        return new LibreOffice();
+        return $toFormat === 'pdf' 
+            ? new LibreOffice() 
+            : new ImageMagick();
     }
 
     /**
@@ -58,6 +61,6 @@ class RtfFormat implements ConvertibleFormat
      */
     public function convert(string $inputFile, string $toFormat): ConversionResult
     {
-        return $this->getDriver()->convert($inputFile, $this->getName(), $toFormat);
+        return $this->getDriver($toFormat)->convert($inputFile, $this->getName(), $toFormat);
     }
 }
