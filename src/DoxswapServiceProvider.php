@@ -28,7 +28,7 @@ class DoxswapServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'doxswap');
 
         $this->app->bind('doxswap', function () {
-            return new Doxswap(new Converter());
+            return new Doxswap();
         });
     }
 }

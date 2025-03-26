@@ -2,12 +2,13 @@
 
 namespace Blaspsoft\Doxswap\Strategies;
 
+use Blaspsoft\Doxswap\Filename;
 use Symfony\Component\Process\Process;
+use Blaspsoft\Doxswap\ConversionResult;
 use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
 use Blaspsoft\Doxswap\Exceptions\ConversionFailedException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Blaspsoft\Doxswap\ConversionResult;
 
 class LibreOffice implements ConversionStrategy
 {
@@ -81,9 +82,11 @@ class LibreOffice implements ConversionStrategy
             throw new ConversionFailedException();
         }
 
+        $outputFile = Filename::rename($outputFile);
+
         return new ConversionResult(
-            inputFile: $inputFile,
-            outputFile: $outputFile,
+            inputFilePath: $inputFile,
+            outputFilePath: $outputFile,
             toFormat: $toFormat,
             startTime: $startTime,
             endTime: $endTime

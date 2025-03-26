@@ -175,7 +175,7 @@ class FormatRegistry
      *
      * @param string $inputFile
      * @param string $toFormat
-     * @return string
+     * @return \Blaspsoft\Doxswap\ConversionResult
      * @throws \Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException
      * @throws \Blaspsoft\Doxswap\Exceptions\UnsupportedConversionException
      * @throws \Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException

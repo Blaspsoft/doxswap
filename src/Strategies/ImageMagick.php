@@ -4,10 +4,11 @@ namespace Blaspsoft\Doxswap\Strategies;
 
 use Imagick;
 use Exception;
+use Blaspsoft\Doxswap\Filename;
+use Blaspsoft\Doxswap\ConversionResult;
+use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
 use Blaspsoft\Doxswap\Exceptions\ConversionFailedException;
-use Illuminate\Support\Facades\Storage;
-use Blaspsoft\Doxswap\ConversionResult;
 
 class ImageMagick implements ConversionStrategy
 {
@@ -82,9 +83,11 @@ class ImageMagick implements ConversionStrategy
             throw new ConversionFailedException("Converted file was not created.");
         }
 
+        $outputFile = Filename::rename($outputFile);
+
         return new ConversionResult(
-            inputFile: $inputFile,
-            outputFile: $outputFile,
+            inputFilePath: $inputFile,
+            outputFilePath: $outputFile,
             toFormat: $toFormat,
             startTime: $startTime,
             endTime: $endTime

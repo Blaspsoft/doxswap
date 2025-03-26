@@ -84,18 +84,18 @@ class ConversionResult
      * @param float $endTime
      */
     public function __construct(
-        string $inputFile, 
-        string $outputFile, 
+        string $inputFilePath, 
+        string $outputFilePath, 
         string $toFormat, 
         float $startTime,
         float $endTime
     ) {
         $this->inputDisk = config('doxswap.input_disk');
         $this->outputDisk = config('doxswap.output_disk');
-        $this->inputFilename = basename($inputFile);
-        $this->inputFilePath = $inputFile;
-        $this->outputFilename = basename($outputFile);
-        $this->outputFilePath = $outputFile;
+        $this->inputFilename = basename($inputFilePath);
+        $this->inputFilePath = $inputFilePath;
+        $this->outputFilename = basename($outputFilePath);
+        $this->outputFilePath = $outputFilePath;
         $this->toFormat = $toFormat;
         $this->startTime = $startTime;
         $this->endTime = $endTime;
