@@ -53,4 +53,18 @@ class SvgConversionTest extends TestCase
         $this->doxswap->convert('test.svg', 'bmp');
         $this->assertTrue(Storage::disk('local')->exists('test.bmp'));
     }
+
+    public function testSvgToWebpConversion()
+    {
+        Storage::disk('local')->put('test.svg', file_get_contents(__DIR__ . '/../Stubs/sample.svg'));
+        $this->doxswap->convert('test.svg', 'webp');
+        $this->assertTrue(Storage::disk('local')->exists('test.webp'));
+    }
+
+    public function testSvgToGifConversion()
+    {
+        Storage::disk('local')->put('test.svg', file_get_contents(__DIR__ . '/../Stubs/sample.svg'));
+        $this->doxswap->convert('test.svg', 'gif');
+        $this->assertTrue(Storage::disk('local')->exists('test.gif'));
+    }
 }

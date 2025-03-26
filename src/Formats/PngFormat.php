@@ -37,7 +37,7 @@ class PngFormat implements ConvertibleFormat
      */
     public function getSupportedConversions(): array
     {
-        return ['pdf', 'jpg', 'svg', 'tiff', 'bmp'];
+        return ['pdf', 'jpg', 'svg', 'tiff', 'bmp', 'webp', 'gif'];
     }
 
     /**

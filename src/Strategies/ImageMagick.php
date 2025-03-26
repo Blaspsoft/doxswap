@@ -31,7 +31,7 @@ class ImageMagick implements ConversionStrategy
      *
      * @var array
      */
-    protected array $supportedFormats = ['bmp', 'png', 'jpg', 'jpeg', 'svg', 'tiff'];
+    protected array $supportedFormats = ['bmp', 'png', 'jpg', 'jpeg', 'svg', 'tiff', 'webp', 'gif'];
 
     /**
      * Create a new ImageMagickStrategy instance.

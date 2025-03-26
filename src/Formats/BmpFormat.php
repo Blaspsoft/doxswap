@@ -37,7 +37,7 @@ class BmpFormat implements ConvertibleFormat
      */
     public function getSupportedConversions(): array
     {
-        return ['pdf', 'jpg', 'png', 'svg', 'tiff'];
+        return ['pdf', 'jpg', 'png', 'svg', 'tiff', 'webp', 'gif'];
     }
 
     /**

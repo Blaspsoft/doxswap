@@ -37,7 +37,7 @@ class SvgFormat implements ConvertibleFormat
      */
     public function getSupportedConversions(): array
     {
-        return ['pdf', 'png', 'jpg', 'tiff', 'bmp'];
+        return ['pdf', 'png', 'jpg', 'tiff', 'bmp', 'webp', 'gif'];
     }
 
     /**

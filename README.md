@@ -10,24 +10,25 @@
 
 # Doxswap
 
-A Laravel package for seamless document conversion using LibreOffice. Convert between various document formats like DOCX, PDF, ODT and more with a simple, elegant API.
+A Laravel package for seamless document and image format conversions. Transform between various formats like DOCX, PDF, ODT, and popular image formats using a simple, elegant API. Powered by LibreOffice for documents and ImageMagick for image processing.
 
 ## 🚀 Features
 
-- 📄 **Multiple Format Support** – Convert between DOCX, PDF, ODT, and other document formats.
-- 🚀 **Simple API** – Easy-to-use interface for document conversion operations.
-- 💾 **Laravel Storage Integration** – Works seamlessly with Laravel's filesystem drivers.
-- ⚡ **Efficient Processing** – Optimized conversion using LibreOffice's powerful engine.
-- 🔒 **Secure File Handling** – Safe and secure document processing with proper cleanup.
-- ⚙️ **Configurable Settings** – Customize paths, storage disks, and conversion options.
-- 🛡️ **Error Handling** – Robust exception handling for unsupported formats and conversions.
+- 📄 **Multiple Format Support** – Convert between documents (DOCX, PDF, ODT) and images (PNG, JPG, WEBP) with ease
+- 🚀 **Simple API** – Easy-to-use interface for all conversion operations
+- 💾 **Laravel Storage Integration** – Works seamlessly with Laravel's filesystem drivers
+- ⚡ **Efficient Processing** – Optimized conversion using LibreOffice and ImageMagick engines
+- 🔍 **Conversion Tracking** – Detailed results including duration and file paths
+- 🔒 **Secure File Handling** – Safe and secure file processing with proper cleanup
+- ⚙️ **Configurable Settings** – Customize paths, storage disks, and conversion options
+- 🛡️ **Error Handling** – Robust exception handling for unsupported formats and conversions
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require blaspsoft/doxswap:0.1.0-beta
+composer require blaspsoft/doxswap
 ```
 
 You can publish the config file with:
@@ -40,19 +41,43 @@ php artisan vendor:publish --tag="doxswap-config"
 
 The `config/doxswap.php` file includes:
 
-#### 💾 Storage
+#### 💾 Storage & Cleanup
 
 - `input_disk`: Where to read files from (default: 'public')
 - `output_disk`: Where to save converted files (default: 'public')
 - `perform_cleanup`: Delete input files after conversion (default: false)
 
-#### 🛠️ LibreOffice Path
+#### 📝 File Naming
+
+Configure how output files are named using different strategies:
 
 ```php
-'libre_office_path' => env('LIBRE_OFFICE_PATH', '/usr/bin/soffice')
+'filename' => [
+    // Strategy: 'original', 'random', or 'timestamp'
+    'strategy' => 'original',
+
+    // Naming options
+    'options' => [
+        'length' => 24,          // Length for random names
+        'prefix' => '',          // Add prefix to filename
+        'suffix' => '',          // Add suffix to filename
+        'separator' => '_',      // Separator for components
+        'format' => 'YmdHis',    // Format for timestamp strategy
+    ],
+]
 ```
 
-Default paths by OS:
+#### 🛠️ Conversion Drivers
+
+Configure paths for conversion tools:
+
+```php
+'drivers' => [
+    'libreoffice_path' => env('LIBRE_OFFICE_PATH', '/usr/bin/soffice'),
+]
+```
+
+Default LibreOffice paths by OS:
 
 - 🐧 Linux: `/usr/bin/soffice`
 - 🍎 macOS: `/Applications/LibreOffice.app/Contents/MacOS/soffice`
@@ -65,113 +90,130 @@ Supports various document formats including:
 - Documents: DOC, DOCX, ODT, RTF, TXT
 - Spreadsheets: XLS, XLSX, ODS, CSV
 - Presentations: PPT, PPTX, ODP
-- Images: JPG, PNG, SVG, BMP, TIFF
+- Images: JPG, PNG, SVG, BMP, TIFF, WEBP, GIF
 - Web: HTML, XML
 - Other: PDF, EPUB
 
 ### Usage
 
 ```php
-$convertedFile = Doxswap::convert('sample.docx', 'pdf');
+$result = Doxswap::convert('sample.docx', 'pdf');
 
 /**
- * Returns a Doxswap object with the following properties:
+ * Returns a ConversionResult object with the following properties:
  *
- * @property string $inputFile      The original input filename
- * @property string $outputFile     The full path to the converted output file
- * @property string $toFormat      The format the file was converted to (e.g. 'pdf')
- * @property ConversionService $conversionService  The service used for conversion
+ * @property string $inputFilename   The original input filename
+ * @property string $inputFilePath   The full path to the input file
+ * @property string $outputFilename  The converted output filename
+ * @property string $outputFilePath  The full path to the converted output file
+ * @property string $toFormat       The format the file was converted to (e.g. 'pdf')
+ * @property string $duration       The time taken for conversion (e.g. "2.21 sec")
+ * @property float  $startTime      Unix timestamp of when conversion started
+ * @property float  $endTime        Unix timestamp of when conversion completed
+ * @property string $inputDisk      The Laravel storage disk used for input
+ * @property string $outputDisk     The Laravel storage disk used for output
  */
 
 ```
 
 ## Requirements
 
-### LibreOffice
+### LibreOffice & ImageMagick
 
-This package requires LibreOffice to be installed on your system. Here's how to install it:
+This package requires LibreOffice and ImageMagick to be installed on your system. Here's how to install them:
 
 #### Ubuntu/Debian
 
 ```bash
 sudo apt update
-sudo apt install libreoffice
+sudo apt install libreoffice imagemagick
 ```
 
 #### macOS
 
 ```bash
-brew install libreoffice
+brew install libreoffice imagemagick
 ```
 
-# or download from https://www.libreoffice.org/download/download-libreoffice/
+# or download LibreOffice from https://www.libreoffice.org/download/download-libreoffice/
 
 #### Windows
 
 ```bash
-choco install libreoffice
+choco install libreoffice imagemagick
 ```
 
-# or download from https://www.libreoffice.org/download/download-libreoffice/
+# or download LibreOffice from https://www.libreoffice.org/download/download-libreoffice/
 
 #### Docker
 
-If you're using Docker, you can add LibreOffice to your container:
+If you're using Docker, you can add the required dependencies to your container:
 
 ```dockerfile
 # Ubuntu/Debian based
-RUN apt-get update && apt-get install -y libreoffice
+RUN apt-get update && apt-get install -y libreoffice imagemagick
 
 # Alpine based
-RUN apk add --no-cache libreoffice
+RUN apk add --no-cache libreoffice imagemagick
 ```
 
 ### PHP Requirements
 
 - PHP >= 8.1
 - ext-fileinfo
+- ext-imagick
 - Laravel >= 9.0
 
-## Supported Conversions 📄 ↔️ 📑
+## 🔁 Supported Conversions by Category
 
-| From/To | PDF | DOCX | ODT | RTF | TXT | HTML | EPUB | XML | XLSX | ODS | CSV | PPT | PPTX | ODP | PNG | JPG | SVG | TIFF |
-| ------- | :-: | :--: | :-: | :-: | :-: | :--: | :--: | :-: | :--: | :-: | :-: | :-: | :--: | :-: | :-: | :-: | :-: | :--: |
-| DOC     | ✅  |  ✅  | ✅  | ✅  | ✅  |  ✅  |  ✅  | ✅  |      |     |     |     |      |     |     |     |     |      |
-| DOCX    | ✅  |      | ✅  | ✅  | ✅  |  ✅  |  ✅  | ✅  |      |     |     |     |      |     |     |     |     |      |
-| ODT     | ✅  |  ✅  | ✅  | ✅  | ✅  |  ✅  |      | ✅  |      |     |     |     |      |     |     |     |     |      |
-| RTF     | ✅  |  ✅  | ✅  |     | ✅  |  ✅  |      | ✅  |      |     |     |     |      |     |     |     |     |      |
-| TXT     | ✅  |  ✅  | ✅  |     |     |  ✅  |      | ✅  |      |     |     |     |      |     |     |     |     |      |
-| HTML    | ✅  |      | ✅  |     | ✅  |      |      |     |      |     |     |     |      |     |     |     |     |      |
-| XML     | ✅  |  ✅  | ✅  |     | ✅  |  ✅  |      |     |      |     |     |     |      |     |     |     |     |      |
-| CSV     | ✅  |      |     |     |     |  ✅  |      |     |  ✅  | ✅  |     |     |      |     |     |     |     |      |
-| XLSX    | ✅  |      |     |     |     |  ✅  |      |     |      | ✅  | ✅  |     |      |     |     |     |     |      |
-| XLS     | ✅  |      |     |     |     |  ✅  |      |     |      | ✅  | ✅  |     |      |     |     |     |     |      |
-| ODS     | ✅  |      |     |     |     |  ✅  |      |     |  ✅  |     | ✅  |     |      |     |     |     |     |      |
-| PPTX    | ✅  |      |     |     |     |      |      |     |      |     |     |     |      | ✅  |     |     |     |      |
-| PPT     | ✅  |      |     |     |     |      |      |     |      |     |     |     |      | ✅  |     |     |     |      |
-| ODP     | ✅  |      |     |     |     |      |      |     |      |     |     |     |  ✅  |     |     |     |     |      |
-| SVG     | ✅  |      |     |     |     |      |      |     |      |     |     |     |      |     | ✅  | ✅  |     |  ✅  |
-| JPG     | ✅  |      |     |     |     |      |      |     |      |     |     |     |      |     | ✅  |     | ✅  |      |
-| PNG     | ✅  |      |     |     |     |      |      |     |      |     |     |     |      |     |     | ✅  | ✅  |      |
-| BMP     | ✅  |      |     |     |     |      |      |     |      |     |     |     |      |     | ✅  | ✅  |     |      |
-| TIFF    | ✅  |      |     |     |     |      |      |     |      |     |     |     |      |     | ✅  | ✅  |     |      |
+### 📝 Documents
+
+| From | Supported Conversions                          |
+| ---- | ---------------------------------------------- |
+| DOCX | PDF ✅✅, ODT, RTF, TXT, HTML, XML, EPUB       |
+| DOC  | PDF ✅✅, DOCX, ODT, RTF, TXT, HTML, XML, EPUB |
+| ODT  | PDF, DOCX, RTF, TXT, HTML, XML                 |
+| RTF  | PDF, DOCX, ODT, TXT, HTML, XML                 |
+| TXT  | PDF, DOCX, ODT, HTML, XML                      |
+| HTML | PDF, ODT, TXT                                  |
+| XML  | PDF, DOCX, ODT, TXT, HTML                      |
+
+### 📊 Spreadsheets
+
+| From | Supported Conversions |
+| ---- | --------------------- |
+| XLSX | PDF ✅✅, ODS, CSV    |
+| XLS  | PDF, XLSX, ODS, CSV   |
+| ODS  | PDF, XLSX, CSV        |
+| CSV  | PDF, XLSX, ODS        |
+
+### 🎯 Presentations
+
+| From | Supported Conversions |
+| ---- | --------------------- |
+| PPTX | PDF ✅✅, ODP         |
+| PPT  | PDF, PPTX, ODP        |
+| ODP  | PDF, PPTX             |
+
+### 🖼️ Images
+
+| From | Supported Conversions                  |
+| ---- | -------------------------------------- |
+| PNG  | PDF ✅, JPG, SVG, TIFF, WEBP, GIF, BMP |
+| JPG  | PDF ✅, PNG, SVG, TIFF, WEBP, GIF, BMP |
+| SVG  | PDF, PNG, JPG, TIFF, WEBP, GIF, BMP    |
+| BMP  | PDF, PNG, JPG, SVG, TIFF, WEBP, GIF    |
+| TIFF | PDF, PNG, JPG, SVG, WEBP, GIF, BMP     |
+| WEBP | PDF, PNG, JPG, SVG, TIFF, GIF, BMP     |
+| GIF  | PDF, PNG, JPG, SVG, TIFF, WEBP, BMP    |
 
 ### Legend 🔍
 
-- ✅ : Supported conversion
-- Empty cell: Conversion not supported
+- ✅✅ = Common high-priority conversion
+- ✅ = Popular supported format
+- (unlisted) = Conversion not supported
 
-### File Type Categories 📁
-
-- 📝 Documents: DOC, DOCX, ODT, RTF, TXT
-- 🌐 Web: HTML, XML
-- 📊 Spreadsheets: XLSX, XLS, ODS, CSV
-- 🎯 Presentations: PPT, PPTX, ODP
-- 🖼️ Images: SVG, JPG, PNG, BMP, TIFF
-- 📚 eBooks: EPUB
-- 📄 Universal: PDF
-
-> **Note**: All conversions are performed using LibreOffice in headless mode 🚀
+> **Note**: Document conversions are performed using LibreOffice in headless mode, while image format conversions utilize ImageMagick 🚀
 
 ## License
 

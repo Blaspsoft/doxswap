@@ -37,7 +37,7 @@ class TiffFormat implements ConvertibleFormat
      */
     public function getSupportedConversions(): array
     {
-        return ['pdf', 'jpg', 'png', 'svg', 'bmp'];
+        return ['pdf', 'jpg', 'png', 'svg', 'bmp', 'webp', 'gif'];
     }
 
     /**

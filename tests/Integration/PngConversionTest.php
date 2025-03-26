@@ -53,4 +53,18 @@ class PngConversionTest extends TestCase
         $this->doxswap->convert('test.png', 'bmp');
         $this->assertTrue(Storage::disk('local')->exists('test.bmp'));
     }
+
+    public function testPngToWebpConversion()
+    {
+        Storage::disk('local')->put('test.png', file_get_contents(__DIR__ . '/../Stubs/sample.png'));
+        $this->doxswap->convert('test.png', 'webp');
+        $this->assertTrue(Storage::disk('local')->exists('test.webp')); 
+    }
+
+    public function testPngToGifConversion()
+    {
+        Storage::disk('local')->put('test.png', file_get_contents(__DIR__ . '/../Stubs/sample.png'));
+        $this->doxswap->convert('test.png', 'gif');
+        $this->assertTrue(Storage::disk('local')->exists('test.gif'));
+    }   
 }

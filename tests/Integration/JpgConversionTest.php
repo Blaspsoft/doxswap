@@ -53,4 +53,18 @@ class JpgConversionTest extends TestCase
         $this->doxswap->convert('test.jpg', 'bmp');
         $this->assertTrue(Storage::disk('local')->exists('test.bmp'));
     }
+
+    public function testJpgToWebpConversion()
+    {
+        Storage::disk('local')->put('test.jpg', file_get_contents(__DIR__ . '/../Stubs/sample.jpg'));
+        $this->doxswap->convert('test.jpg', 'webp');
+        $this->assertTrue(Storage::disk('local')->exists('test.webp')); 
+    }
+
+    public function testJpgToGifConversion()
+    {
+        Storage::disk('local')->put('test.jpg', file_get_contents(__DIR__ . '/../Stubs/sample.jpg'));
+        $this->doxswap->convert('test.jpg', 'gif');
+        $this->assertTrue(Storage::disk('local')->exists('test.gif'));
+    }
 }

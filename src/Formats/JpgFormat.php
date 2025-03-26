@@ -37,7 +37,7 @@ class JpgFormat implements ConvertibleFormat
      */
     public function getSupportedConversions(): array
     {
-        return ['pdf', 'png', 'svg', 'tiff', 'bmp'];
+        return ['pdf', 'png', 'svg', 'tiff', 'bmp', 'webp', 'gif'];
     }
 
     /**

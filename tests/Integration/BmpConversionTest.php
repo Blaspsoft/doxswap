@@ -53,5 +53,18 @@ class BmpConversionTest extends TestCase
         $this->doxswap->convert('test.bmp', 'tiff');
         $this->assertTrue(Storage::disk('local')->exists('test.tiff'));
     }
-    
+
+    public function testBmpToWebpConversion()   
+    {
+        Storage::disk('local')->put('test.bmp', file_get_contents(__DIR__ . '/../Stubs/sample.bmp'));
+        $this->doxswap->convert('test.bmp', 'webp');
+        $this->assertTrue(Storage::disk('local')->exists('test.webp'));
+    }
+
+    public function testBmpToGifConversion()
+    {
+        Storage::disk('local')->put('test.bmp', file_get_contents(__DIR__ . '/../Stubs/sample.bmp'));
+        $this->doxswap->convert('test.bmp', 'gif');
+        $this->assertTrue(Storage::disk('local')->exists('test.gif'));
+    }
 }
