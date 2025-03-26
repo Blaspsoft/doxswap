@@ -33,7 +33,7 @@ abstract class TestCase extends BaseTestCase
         $app['config']->set('doxswap.input_disk', 'local');
         $app['config']->set('doxswap.output_disk', 'local');
         $app['config']->set('doxswap.perform_cleanup', false);
-        $app['config']->set('doxswap.drivers.libreoffice_path', env('LIBREOFFICE_PATH', '/Applications/LibreOffice.app/Contents/MacOS/soffice'));
-        //$app['config']->set('doxswap.drivers.libreoffice_path', env('LIBREOFFICE_PATH', '/usr/bin/soffice'));
+        //$app['config']->set('doxswap.drivers.libreoffice_path', env('LIBREOFFICE_PATH', '/Applications/LibreOffice.app/Contents/MacOS/soffice'));
+        $app['config']->set('doxswap.drivers.libreoffice_path', env('LIBREOFFICE_PATH', '/usr/bin/soffice'));
     }
 }
