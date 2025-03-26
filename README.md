@@ -92,7 +92,7 @@ Supports various document formats including:
 - Presentations: PPT, PPTX, ODP
 - Images: JPG, PNG, SVG, BMP, TIFF, WEBP, GIF
 - Web: HTML, XML
-- Other: PDF, EPUB
+- Other: PDF
 
 ### Usage
 
