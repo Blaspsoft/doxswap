@@ -2,13 +2,13 @@
 
 namespace Blaspsoft\Doxswap\Tests\Integration;
 
-use Blaspsoft\Doxswap\Converter;
+use Blaspsoft\Doxswap\Doxswap;
 use Blaspsoft\Doxswap\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 
 class SvgConversionTest extends TestCase
 {
-    protected Converter $converter;
+    protected Doxswap $doxswap;
 
     protected function setUp(): void
     {
@@ -16,41 +16,41 @@ class SvgConversionTest extends TestCase
         
         Storage::fake('local');
 
-        $this->converter = new Converter();
+        $this->doxswap = new Doxswap();
     }
     
     public function testSvgToPdfConversion()
     {
         Storage::disk('local')->put('test.svg', file_get_contents(__DIR__ . '/../Stubs/sample.svg'));
-        $this->converter->convert('test.svg', 'pdf');
+        $this->doxswap->convert('test.svg', 'pdf');
         $this->assertTrue(Storage::disk('local')->exists('test.pdf'));
     }
 
     public function testSvgToPngConversion()
     {
         Storage::disk('local')->put('test.svg', file_get_contents(__DIR__ . '/../Stubs/sample.svg'));
-        $this->converter->convert('test.svg', 'png');
+        $this->doxswap->convert('test.svg', 'png');
         $this->assertTrue(Storage::disk('local')->exists('test.png'));
     }
 
     public function testSvgToJpgConversion()
     {
         Storage::disk('local')->put('test.svg', file_get_contents(__DIR__ . '/../Stubs/sample.svg'));
-        $this->converter->convert('test.svg', 'jpg');
+        $this->doxswap->convert('test.svg', 'jpg');
         $this->assertTrue(Storage::disk('local')->exists('test.jpg'));
     }
 
     public function testSvgToTiffConversion()
     {
         Storage::disk('local')->put('test.svg', file_get_contents(__DIR__ . '/../Stubs/sample.svg'));
-        $this->converter->convert('test.svg', 'tiff');
+        $this->doxswap->convert('test.svg', 'tiff');
         $this->assertTrue(Storage::disk('local')->exists('test.tiff'));
     }
 
     public function testSvgToBmpConversion()
     {
         Storage::disk('local')->put('test.svg', file_get_contents(__DIR__ . '/../Stubs/sample.svg'));
-        $this->converter->convert('test.svg', 'bmp');
+        $this->doxswap->convert('test.svg', 'bmp');
         $this->assertTrue(Storage::disk('local')->exists('test.bmp'));
     }
 }

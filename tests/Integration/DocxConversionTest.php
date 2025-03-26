@@ -2,13 +2,13 @@
 
 namespace Blaspsoft\Doxswap\Tests\Integration;
 
-use Blaspsoft\Doxswap\Converter;
+use Blaspsoft\Doxswap\Doxswap;
 use Blaspsoft\Doxswap\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 
 class DocxConversionTest extends TestCase
 {
-    protected Converter $converter;
+    protected Doxswap $doxswap;
 
     protected function setUp(): void
     {
@@ -16,13 +16,13 @@ class DocxConversionTest extends TestCase
     
         Storage::fake('local');
 
-        $this->converter = new Converter();
+        $this->doxswap = new Doxswap();
     }
 
     public function testDocxToPdfConversion()
     {
         Storage::disk('local')->put('test.docx', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
-        $this->converter->convert('test.docx', 'pdf');
+        $this->doxswap->convert('test.docx', 'pdf');
 
         $this->assertTrue(Storage::disk('local')->exists('test.pdf'));
     }
@@ -30,7 +30,7 @@ class DocxConversionTest extends TestCase
     public function testDocxToOdtConversion()
     {
         Storage::disk('local')->put('test.docx', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
-        $this->converter->convert('test.docx', 'odt');
+        $this->doxswap->convert('test.docx', 'odt');
 
         $this->assertTrue(Storage::disk('local')->exists('test.odt'));
     }
@@ -38,7 +38,7 @@ class DocxConversionTest extends TestCase
     public function testDocxToRtfConversion()
     {
         Storage::disk('local')->put('test.docx', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
-        $this->converter->convert('test.docx', 'rtf');
+        $this->doxswap->convert('test.docx', 'rtf');
 
         $this->assertTrue(Storage::disk('local')->exists('test.rtf'));
     }
@@ -46,7 +46,7 @@ class DocxConversionTest extends TestCase
     public function testDocxToTxtConversion()
     {
         Storage::disk('local')->put('test.docx', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
-        $this->converter->convert('test.docx', 'txt');
+        $this->doxswap->convert('test.docx', 'txt');
 
         $this->assertTrue(Storage::disk('local')->exists('test.txt'));
     }
@@ -54,7 +54,7 @@ class DocxConversionTest extends TestCase
     public function testDocxToHtmlConversion()
     {
         Storage::disk('local')->put('test.docx', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
-        $this->converter->convert('test.docx', 'html');
+        $this->doxswap->convert('test.docx', 'html');
 
         $this->assertTrue(Storage::disk('local')->exists('test.html'));
     }
@@ -62,7 +62,7 @@ class DocxConversionTest extends TestCase
     public function testDocxToEpubConversion()
     {
         Storage::disk('local')->put('test.docx', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
-        $this->converter->convert('test.docx', 'epub');
+        $this->doxswap->convert('test.docx', 'epub');
 
         $this->assertTrue(Storage::disk('local')->exists('test.epub'));
     }
@@ -70,7 +70,7 @@ class DocxConversionTest extends TestCase
     public function testDocxToXmlConversion()
     {
         Storage::disk('local')->put('test.docx', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
-        $this->converter->convert('test.docx', 'xml');
+        $this->doxswap->convert('test.docx', 'xml');
 
         $this->assertTrue(Storage::disk('local')->exists('test.xml'));
     }
