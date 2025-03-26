@@ -211,6 +211,12 @@ RUN apk add --no-cache libreoffice imagemagick potrace
 
 > **Note**: Document conversions are performed using LibreOffice in headless mode, while image format conversions utilize ImageMagick 🚀
 
+## 🤝 Sponsors
+
+If you find this package helpful, please consider sponsoring the development:
+
+> 🚀 [Become a GitHub Sponsor](https://github.com/sponsors/Blaspsoft)
+
 ## License
 
 Blasp is open-sourced software licensed under the [MIT license](LICENSE).
