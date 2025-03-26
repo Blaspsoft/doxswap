@@ -120,30 +120,26 @@ $result = Doxswap::convert('sample.docx', 'pdf');
 
 ### LibreOffice & ImageMagick
 
-This package requires LibreOffice and ImageMagick to be installed on your system. Here's how to install them:
+This package requires LibreOffice, ImageMagick, and Potrace to be installed on your system. Here's how to install them:
 
 #### Ubuntu/Debian
 
 ```bash
 sudo apt update
-sudo apt install libreoffice imagemagick
+sudo apt install libreoffice imagemagick potrace
 ```
 
 #### macOS
 
 ```bash
-brew install libreoffice imagemagick
+brew install libreoffice imagemagick potrace
 ```
-
-# or download LibreOffice from https://www.libreoffice.org/download/download-libreoffice/
 
 #### Windows
 
 ```bash
-choco install libreoffice imagemagick
+choco install libreoffice imagemagick potrace
 ```
-
-# or download LibreOffice from https://www.libreoffice.org/download/download-libreoffice/
 
 #### Docker
 
@@ -151,10 +147,10 @@ If you're using Docker, you can add the required dependencies to your container:
 
 ```dockerfile
 # Ubuntu/Debian based
-RUN apt-get update && apt-get install -y libreoffice imagemagick
+RUN apt-get update && apt-get install -y libreoffice imagemagick potrace
 
 # Alpine based
-RUN apk add --no-cache libreoffice imagemagick
+RUN apk add --no-cache libreoffice imagemagick potrace
 ```
 
 ### PHP Requirements
