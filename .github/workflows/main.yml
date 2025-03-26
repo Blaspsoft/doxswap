@@ -36,11 +36,15 @@ jobs:
       - name: Install LibreOffice
         run: sudo apt-get update && sudo apt-get install -y libreoffice
 
-      # Step 6: Install Composer dependencies
+      # Step 6: Install Potrace (Required for BMP to SVG conversion)
+      - name: Install Potrace
+        run: sudo apt-get install -y potrace
+
+      # Step 7: Install Composer dependencies
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
-      # Step 7: Set up Laravel environment (if needed)
+      # Step 8: Set up Laravel environment (if needed)
       - name: Set up Laravel environment
         run: |
           echo "APP_KEY=$(php artisan key:generate --show)" > .env
@@ -48,10 +52,10 @@ jobs:
           echo "DB_CONNECTION=sqlite" >> .env
           echo "LIBREOFFICE_PATH=/usr/bin/soffice" >> .env
 
-      # Step 8: Run Unit tests
+      # Step 9: Run Unit tests
       - name: Run Unit tests
         run: php ./vendor/bin/phpunit --testsuite=Unit
 
-      # Step 9: Run Integration tests (requires LibreOffice)
+      # Step 10: Run Integration tests (requires LibreOffice)
       - name: Run Integration tests
         run: php ./vendor/bin/phpunit --testsuite=Integration --testdox
