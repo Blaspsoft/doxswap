@@ -22,12 +22,11 @@ class ConversionCleanupTest extends TestCase
         // Set up configuration values for testing
         $app['config']->set('doxswap.input_disk', 'local');
         $app['config']->set('doxswap.output_disk', 'local');
-        $app['config']->set('doxswap.cleanup_strategy', 'both');
     }
 
-    public function testCleanupInput()
+    public function testPerformCleanupTrue()
     {
-        $this->app['config']->set('doxswap.cleanup_strategy', 'input');
+        $this->app['config']->set('doxswap.perform_cleanup', true);
 
         $conversionCleanup = new ConversionCleanup();
 
@@ -38,39 +37,9 @@ class ConversionCleanupTest extends TestCase
         $conversionCleanup->cleanup('inputFile.txt', 'outputFile.txt');
     }
 
-    public function testCleanupOutput()
+    public function testPerformCleanupFalse()
     {
-        $this->app['config']->set('doxswap.cleanup_strategy', 'output');
-
-        $conversionCleanup = new ConversionCleanup();
-
-        Storage::shouldReceive('delete')
-            ->once()
-            ->with('outputFile.txt');
-
-        $conversionCleanup->cleanup('inputFile.txt', 'outputFile.txt');
-    }
-
-    public function testCleanupBoth()
-    {
-        $this->app['config']->set('doxswap.cleanup_strategy', 'both');
-
-        $conversionCleanup = new ConversionCleanup();
-
-        Storage::shouldReceive('delete')
-            ->once()
-            ->with('inputFile.txt');
-
-        Storage::shouldReceive('delete')
-            ->once()
-            ->with('outputFile.txt');
-
-        $conversionCleanup->cleanup('inputFile.txt', 'outputFile.txt');
-    }
-
-    public function testCleanupNone()
-    {
-        $this->app['config']->set('doxswap.cleanup_strategy', 'none');
+        $this->app['config']->set('doxswap.perform_cleanup', false);
 
         $conversionCleanup = new ConversionCleanup();
 
