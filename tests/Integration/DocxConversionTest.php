@@ -74,4 +74,33 @@ class DocxConversionTest extends TestCase
 
         $this->assertTrue(Storage::disk('local')->exists('test.xml'));
     }
+
+    public function testFormatNameInFilenameIsKept()
+    {
+        Storage::disk('local')->put('docx-guide.docx', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
+        $this->doxswap->convert('docx-guide.docx', 'pdf');
+
+        $this->assertTrue(Storage::disk('local')->exists('docx-guide.pdf'));
+    }
+
+    public function testUppercaseExtensionConversion()
+    {
+        Storage::disk('local')->put('REPORT.DOCX', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
+        $this->doxswap->convert('REPORT.DOCX', 'PDF');
+
+        $this->assertTrue(Storage::disk('local')->exists('REPORT.pdf'));
+    }
+
+    public function testCleanupDeletesNestedInputFile()
+    {
+        config(['doxswap.perform_cleanup' => true]);
+
+        Storage::disk('local')->put('reports/input.docx', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
+        Storage::disk('local')->put('input.docx', 'root file that must be kept');
+
+        (new Doxswap())->convert('reports/input.docx', 'pdf');
+
+        $this->assertFalse(Storage::disk('local')->exists('reports/input.docx'));
+        $this->assertTrue(Storage::disk('local')->exists('input.docx'));
+    }
 }

@@ -84,4 +84,18 @@ class FormatRegistryTest extends TestCase
         File::shouldReceive('mimeType')->andReturn('invalid/mime-type');
         $this->formatRegistry->convert('test.doc', 'pdf');
     }
+
+    public function testGetFormatIsCaseInsensitive()
+    {
+        $this->assertInstanceOf(DocFormat::class, $this->formatRegistry->getFormat('DOC'));
+    }
+
+    public function testIsSupportedConversionIgnoresCase()
+    {
+        $mockFormat = $this->createMock(ConvertibleFormat::class);
+        $mockFormat->method('getSupportedConversions')->willReturn(['PDF']);
+
+        $this->assertTrue($this->formatRegistry->isSupportedConversion($mockFormat, 'pdf'));
+        $this->assertTrue($this->formatRegistry->isSupportedConversion($mockFormat, 'Pdf'));
+    }
 }

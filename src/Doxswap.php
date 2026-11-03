@@ -43,7 +43,7 @@ class Doxswap
     /**
      * Convert a file to a different format
      *
-     * @param string $file The absolute path to the file to convert
+     * @param string $file The path to the file, relative to the input disk
      * @param string $toFormat The format to convert the file to
      * @return \Blaspsoft\Doxswap\ConversionResult
      */
@@ -51,7 +51,7 @@ class Doxswap
     {
         $this->result = $this->formatRegistry->convert($file, $toFormat);
 
-        $this->cleanup->cleanup($this->result->inputFilename);
+        $this->cleanup->cleanup($file);
 
         return $this->result;
     }

@@ -106,7 +106,7 @@ class FormatRegistry
      */
     public function register(ConvertibleFormat $format): void
     {
-        $this->formats[$format->getName()] = $format;
+        $this->formats[strtolower($format->getName())] = $format;
     }
 
     /**
@@ -117,7 +117,7 @@ class FormatRegistry
      */
     public function getFormat(string $name): ConvertibleFormat
     {
-        return $this->formats[$name];
+        return $this->formats[strtolower($name)];
     }
 
     /**
@@ -139,7 +139,7 @@ class FormatRegistry
      */
     public function isSupportedConversion(ConvertibleFormat $inputFormat, string $outputFormat): bool
     {
-        return in_array($outputFormat, $inputFormat->getSupportedConversions());
+        return in_array(strtolower($outputFormat), array_map('strtolower', $inputFormat->getSupportedConversions()));
     }
 
     /** 
@@ -188,6 +188,8 @@ class FormatRegistry
      */
     public function convert(string $inputFile, string $toFormat): ConversionResult
     {
+        $toFormat = strtolower($toFormat);
+
         if (!Storage::disk($this->inputDisk)->exists($inputFile)) {
             throw new InputFileNotFoundException($inputFile);
         }
