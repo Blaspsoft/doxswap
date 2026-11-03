@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests;
+namespace Blaspsoft\Doxswap\Tests\Unit;
 
 use Blaspsoft\Doxswap\ConversionCleanup;
+use Blaspsoft\Doxswap\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
-use Orchestra\Testbench\TestCase;
 
 class ConversionCleanupTest extends TestCase
 {
@@ -12,40 +12,28 @@ class ConversionCleanupTest extends TestCase
     {
         parent::setUp();
 
-        // Mock the Storage facade
         Storage::shouldReceive('disk')
             ->andReturnSelf();
     }
 
-    protected function getEnvironmentSetUp($app)
-    {
-        // Set up configuration values for testing
-        $app['config']->set('doxswap.input_disk', 'local');
-        $app['config']->set('doxswap.output_disk', 'local');
-    }
-
     public function testPerformCleanupTrue()
     {
-        $this->app['config']->set('doxswap.perform_cleanup', true);
-
-        $conversionCleanup = new ConversionCleanup();
+        $conversionCleanup = new ConversionCleanup('local', true);
 
         Storage::shouldReceive('delete')
             ->once()
             ->with('inputFile.txt');
 
-        $conversionCleanup->cleanup('inputFile.txt', 'outputFile.txt');
+        $conversionCleanup->cleanup('inputFile.txt');
     }
 
     public function testPerformCleanupFalse()
     {
-        $this->app['config']->set('doxswap.perform_cleanup', false);
-
-        $conversionCleanup = new ConversionCleanup();
+        $conversionCleanup = new ConversionCleanup('local', false);
 
         Storage::shouldReceive('delete')
             ->never();
 
-        $conversionCleanup->cleanup('inputFile.txt', 'outputFile.txt');
+        $conversionCleanup->cleanup('inputFile.txt');
     }
 }

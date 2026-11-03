@@ -34,17 +34,35 @@ class LibreOffice implements ConversionStrategy
     protected string $outputDisk;
 
     /**
-     * Create a new LibreOfficeStrategy instance.
+     * The filename service.
      *
-     * @return void
+     * @var \Blaspsoft\Doxswap\Filename
      */
-    public function __construct()
+    protected Filename $filename;
+
+    /**
+     * The process timeout in seconds.
+     *
+     * @var int
+     */
+    protected int $timeout;
+
+    /**
+     * Create a new LibreOffice instance.
+     *
+     * @param string $path
+     * @param string $inputDisk
+     * @param string $outputDisk
+     * @param \Blaspsoft\Doxswap\Filename $filename
+     * @param int $timeout
+     */
+    public function __construct(string $path, string $inputDisk, string $outputDisk, Filename $filename, int $timeout = 120)
     {
-        $this->path = config('doxswap.drivers.libreoffice_path');
-
-        $this->inputDisk = config('doxswap.input_disk');
-
-        $this->outputDisk = config('doxswap.output_disk');
+        $this->path = $path;
+        $this->inputDisk = $inputDisk;
+        $this->outputDisk = $outputDisk;
+        $this->filename = $filename;
+        $this->timeout = $timeout;
     }
 
     /**
@@ -62,34 +80,41 @@ class LibreOffice implements ConversionStrategy
         $startTime = (float) microtime(true);
 
         $command = [
-            $this->path, // Path to the LibreOffice binary
-            '--headless', // Run in headless mode
-            '--convert-to', $toFormat , // Convert to the specified format
-            '--outdir', Storage::disk($this->outputDisk)->path(''), // Output directory
-            $inputFile, // Input file
+            $this->path,
+            '--headless',
+            '--convert-to', $toFormat,
+            '--outdir', Storage::disk($this->outputDisk)->path(''),
+            $inputFile,
         ];
 
         $process = new Process($command);
+        $process->setTimeout($this->timeout);
         $process->run();
 
         $endTime = (float) microtime(true);
 
         if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
+            throw new ConversionFailedException(
+                "LibreOffice conversion failed: " . $process->getErrorOutput(),
+                0,
+                new ProcessFailedException($process)
+            );
         }
 
         if (!Storage::disk($this->outputDisk)->exists(basename($outputFile))) {
-            throw new ConversionFailedException();
+            throw new ConversionFailedException("LibreOffice conversion produced no output file.");
         }
 
-        $outputFile = Filename::rename($outputFile);
+        $outputFile = $this->filename->rename($outputFile);
 
         return new ConversionResult(
             inputFilePath: $inputFile,
             outputFilePath: $outputFile,
             toFormat: $toFormat,
             startTime: $startTime,
-            endTime: $endTime
+            endTime: $endTime,
+            inputDisk: $this->inputDisk,
+            outputDisk: $this->outputDisk
         );
     }
 }

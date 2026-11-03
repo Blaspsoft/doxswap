@@ -2,14 +2,13 @@
 
 namespace Blaspsoft\Doxswap\Tests\Unit;
 
-use Orchestra\Testbench\TestCase;
+use Blaspsoft\Doxswap\Tests\TestCase;
 use Illuminate\Support\Facades\File;
 use Blaspsoft\Doxswap\FormatRegistry;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Formats\DocFormat;
-use Blaspsoft\Doxswap\Formats\DocxFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
+use Blaspsoft\Doxswap\Exceptions\FormatNotFoundException;
 
 class FormatRegistryTest extends TestCase
 {
@@ -19,22 +18,18 @@ class FormatRegistryTest extends TestCase
     {
         parent::setUp();
 
-        // Mock the configuration for the input disk
-        Config::set('doxswap.input_disk', 'local');
-
-        // Mock the storage disk
         Storage::fake('local');
 
-        $this->formatRegistry = new FormatRegistry();
+        $this->formatRegistry = $this->app->make(FormatRegistry::class);
     }
 
     public function testRegisterFormat()
     {
         $mockFormat = $this->createMock(ConvertibleFormat::class);
         $mockFormat->method('getName')->willReturn('mock');
-        
+
         $this->formatRegistry->register($mockFormat);
-        
+
         $this->assertSame($mockFormat, $this->formatRegistry->getFormat('mock'));
     }
 
@@ -44,15 +39,23 @@ class FormatRegistryTest extends TestCase
         $this->assertInstanceOf(DocFormat::class, $format);
     }
 
+    public function testGetFormatThrowsFormatNotFoundException()
+    {
+        $this->expectException(FormatNotFoundException::class);
+        $this->expectExceptionMessage("Format 'nonexistent' not found.");
+
+        $this->formatRegistry->getFormat('nonexistent');
+    }
+
     public function testIsSupportedConversion()
     {
-        $docFormat = new DocFormat();
+        $docFormat = $this->formatRegistry->getFormat('doc');
         $this->assertTrue($this->formatRegistry->isSupportedConversion($docFormat, 'pdf'));
     }
 
     public function testIsSupportedMimeType()
     {
-        $docFormat = new DocFormat();
+        $docFormat = $this->formatRegistry->getFormat('doc');
         $this->assertTrue($this->formatRegistry->isSupportedMimeType($docFormat, 'application/msword'));
     }
 

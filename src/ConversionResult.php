@@ -4,94 +4,48 @@ namespace Blaspsoft\Doxswap;
 
 class ConversionResult
 {
-    /**
-     * The input filename.
-     *
-     * @var string
-     */
-    public string $inputFilename;
+    public readonly string $inputFilename;
 
-    /**
-     * The input file.
-     *
-     * @var string
-     */
-    public string $inputFilePath;
+    public readonly string $inputFilePath;
 
-    /** 
-     * The output filename.
-     *
-     * @var string
-     */
-    public string $outputFilename;
+    public readonly string $outputFilename;
 
-    /**
-     * The output file.
-     *
-     * @var string
-     */
-    public string $outputFilePath;
+    public readonly string $outputFilePath;
 
-    /**
-     * The format to convert the file to.
-     *
-     * @var string
-     */
-    public string $toFormat;
+    public readonly string $toFormat;
 
-    /**
-     * The duration of the conversion.
-     *
-     * @var string
-     */
-    public string $duration;
+    public readonly string $duration;
 
-    /**
-     * The start time of the conversion.
-     *
-     * @var float
-     */
-    public float $startTime;
+    public readonly float $startTime;
 
-    /**
-     * The end time of the conversion.
-     *
-     * @var float
-     */
-    public float $endTime;
+    public readonly float $endTime;
 
-    /**
-     * The input disk.
-     *
-     * @var string
-     */
-    public string $inputDisk;
+    public readonly string $inputDisk;
 
-    /**
-     * The output disk.
-     *
-     * @var string
-     */
-    public string $outputDisk;
+    public readonly string $outputDisk;
 
     /**
      * Create a new conversion result.
      *
-     * @param string $inputFile
-     * @param string $outputFile
+     * @param string $inputFilePath
+     * @param string $outputFilePath
      * @param string $toFormat
      * @param float $startTime
      * @param float $endTime
+     * @param string $inputDisk
+     * @param string $outputDisk
      */
     public function __construct(
-        string $inputFilePath, 
-        string $outputFilePath, 
-        string $toFormat, 
+        string $inputFilePath,
+        string $outputFilePath,
+        string $toFormat,
         float $startTime,
-        float $endTime
+        float $endTime,
+        string $inputDisk,
+        string $outputDisk
     ) {
-        $this->inputDisk = config('doxswap.input_disk');
-        $this->outputDisk = config('doxswap.output_disk');
+        $this->inputDisk = $inputDisk;
+        $this->outputDisk = $outputDisk;
         $this->inputFilename = basename($inputFilePath);
         $this->inputFilePath = $inputFilePath;
         $this->outputFilename = basename($outputFilePath);

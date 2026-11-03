@@ -2,10 +2,9 @@
 
 namespace Blaspsoft\Doxswap\Tests\Unit;
 
-use Mockery;
 use ReflectionClass;
 use Blaspsoft\Doxswap\Filename;
-use Orchestra\Testbench\TestCase;
+use Blaspsoft\Doxswap\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 
 class FilenameTest extends TestCase
@@ -14,12 +13,6 @@ class FilenameTest extends TestCase
     {
         parent::setUp();
 
-        // Set up any necessary configuration
-        config()->set('doxswap.filename.strategy', 'original');
-        config()->set('doxswap.filename.options', []);
-        config()->set('doxswap.output_disk', 'local');
-
-        // Mock the storage disk
         Storage::fake('local');
     }
 
@@ -27,31 +20,46 @@ class FilenameTest extends TestCase
     {
         $filePath = 'path/to/original/file.txt';
 
-        config()->set('doxswap.filename.strategy', 'original');
+        $filename = new Filename('original', [], 'local');
 
         $reflection = new ReflectionClass(Filename::class);
         $method = $reflection->getMethod('generateFileName');
         $method->setAccessible(true);
 
-        $filenameInstance = new Filename();
-        $generatedFileName = $method->invoke($filenameInstance, $filePath);
+        $generatedFileName = $method->invoke($filename, $filePath);
 
         $this->assertEquals(basename($filePath), $generatedFileName);
     }
 
-   public function testGenerateFileNameMethod()
+    public function testGenerateFileNameRandomStrategy()
     {
         $filePath = 'path/to/original/file.txt';
 
-        // Use reflection to access the protected method
+        $filename = new Filename('random', ['length' => 24], 'local');
+
         $reflection = new ReflectionClass(Filename::class);
         $method = $reflection->getMethod('generateFileName');
         $method->setAccessible(true);
 
-        $filenameInstance = new Filename();
-        $generatedFileName = $method->invoke($filenameInstance, $filePath);
+        $generatedFileName = $method->invoke($filename, $filePath);
 
-        // Assert that the generated file name is as expected
-        $this->assertEquals(basename($filePath), $generatedFileName);
+        $this->assertNotEquals(basename($filePath), $generatedFileName);
+        $this->assertStringEndsWith('.txt', $generatedFileName);
+    }
+
+    public function testGenerateFileNameTimestampStrategy()
+    {
+        $filePath = 'path/to/original/file.txt';
+
+        $filename = new Filename('timestamp', ['format' => 'YmdHis'], 'local');
+
+        $reflection = new ReflectionClass(Filename::class);
+        $method = $reflection->getMethod('generateFileName');
+        $method->setAccessible(true);
+
+        $generatedFileName = $method->invoke($filename, $filePath);
+
+        $this->assertNotEquals(basename($filePath), $generatedFileName);
+        $this->assertStringEndsWith('.txt', $generatedFileName);
     }
 }

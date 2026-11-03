@@ -95,6 +95,7 @@ return [
     |   
     */
     'drivers' => [
-        'libreoffice_path' => env('LIBRE_OFFICE_PATH', '/usr/bin/soffice'),
+        'libreoffice_path' => env('LIBREOFFICE_PATH', '/usr/bin/soffice'),
+        'process_timeout' => env('DOXSWAP_PROCESS_TIMEOUT', 120),
     ],
 ];

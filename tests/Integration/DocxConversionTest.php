@@ -3,6 +3,7 @@
 namespace Blaspsoft\Doxswap\Tests\Integration;
 
 use Blaspsoft\Doxswap\Doxswap;
+use Blaspsoft\Doxswap\ConversionResult;
 use Blaspsoft\Doxswap\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,7 +17,7 @@ class DocxConversionTest extends TestCase
     
         Storage::fake('local');
 
-        $this->doxswap = new Doxswap();
+        $this->doxswap = $this->app->make('doxswap');
     }
 
     public function testDocxToPdfConversion()
