@@ -89,7 +89,7 @@ class FormatRegistry
      */
     public function isSupportedConversion(ConvertibleFormat $inputFormat, string $outputFormat): bool
     {
-        return in_array($outputFormat, $inputFormat->getSupportedConversions());
+        return in_array(strtolower($outputFormat), array_map('strtolower', $inputFormat->getSupportedConversions()));
     }
 
     /**

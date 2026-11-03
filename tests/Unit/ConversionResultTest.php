@@ -15,8 +15,8 @@ class ConversionResultTest extends TestCase
             toFormat: 'pdf',
             startTime: 1000.0,
             endTime: 1002.5,
-            inputDisk: 'local',
-            outputDisk: 'local'
+            inputDisk: 'input-disk',
+            outputDisk: 'output-disk'
         );
 
         $this->assertEquals('input.docx', $result->inputFilename);
@@ -26,8 +26,25 @@ class ConversionResultTest extends TestCase
         $this->assertEquals('pdf', $result->toFormat);
         $this->assertEquals(1000.0, $result->startTime);
         $this->assertEquals(1002.5, $result->endTime);
-        $this->assertEquals('local', $result->inputDisk);
-        $this->assertEquals('local', $result->outputDisk);
+        $this->assertEquals('input-disk', $result->inputDisk);
+        $this->assertEquals('output-disk', $result->outputDisk);
+    }
+
+    public function testPropertiesCannotBeModified()
+    {
+        $result = new ConversionResult(
+            inputFilePath: '/path/to/input.docx',
+            outputFilePath: '/path/to/output.pdf',
+            toFormat: 'pdf',
+            startTime: 1000.0,
+            endTime: 1002.5,
+            inputDisk: 'local',
+            outputDisk: 'local'
+        );
+
+        $this->expectException(\Error::class);
+
+        $result->toFormat = 'docx';
     }
 
     public function testFormatDurationSeconds()

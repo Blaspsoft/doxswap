@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
 use Blaspsoft\Doxswap\Exceptions\ConversionFailedException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 
 class LibreOffice implements ConversionStrategy
 {
@@ -89,7 +90,16 @@ class LibreOffice implements ConversionStrategy
 
         $process = new Process($command);
         $process->setTimeout($this->timeout);
-        $process->run();
+
+        try {
+            $process->run();
+        } catch (ProcessTimedOutException $e) {
+            throw new ConversionFailedException(
+                "LibreOffice conversion timed out after {$this->timeout} seconds.",
+                0,
+                $e
+            );
+        }
 
         $endTime = (float) microtime(true);
 

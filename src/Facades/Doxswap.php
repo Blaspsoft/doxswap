@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Facade;
 class Doxswap extends Facade
 {
     /**
+     * Resolve the binding on each call, so config changes apply.
+     *
+     * @var bool
+     */
+    protected static $cached = false;
+
+    /**
      * Get the registered name of the component.
      *
      * @return string

@@ -41,7 +41,7 @@ class Doxswap
     {
         $result = $this->formatRegistry->convert($file, $toFormat);
 
-        $this->cleanup->cleanup($result->inputFilename);
+        $this->cleanup->cleanup($file);
 
         return $result;
     }

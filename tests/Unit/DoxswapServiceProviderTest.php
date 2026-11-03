@@ -51,6 +51,13 @@ class DoxswapServiceProviderTest extends TestCase
         $this->assertSame(120, $this->property($this->app->make(LibreOffice::class), 'timeout'));
     }
 
+    public function testNegativeProcessTimeoutFallsBackTo120()
+    {
+        config(['doxswap.drivers.process_timeout' => '-5']);
+
+        $this->assertSame(120, $this->property($this->app->make(LibreOffice::class), 'timeout'));
+    }
+
     public function testImageFormatsUseLibreOfficeForPdfAndImageMagickOtherwise()
     {
         $png = $this->app->make(FormatRegistry::class)->getFormat('png');

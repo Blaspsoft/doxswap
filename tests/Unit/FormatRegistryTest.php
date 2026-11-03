@@ -58,6 +58,15 @@ class FormatRegistryTest extends TestCase
         $this->assertTrue($this->formatRegistry->isSupportedConversion($docFormat, 'pdf'));
     }
 
+    public function testIsSupportedConversionIgnoresCase()
+    {
+        $mockFormat = $this->createMock(ConvertibleFormat::class);
+        $mockFormat->method('getSupportedConversions')->willReturn(['PDF']);
+
+        $this->assertTrue($this->formatRegistry->isSupportedConversion($mockFormat, 'pdf'));
+        $this->assertTrue($this->formatRegistry->isSupportedConversion($mockFormat, 'Pdf'));
+    }
+
     public function testIsSupportedMimeType()
     {
         $docFormat = $this->formatRegistry->getFormat('doc');

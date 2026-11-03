@@ -134,6 +134,6 @@ class DoxswapServiceProvider extends ServiceProvider
             return null;
         }
 
-        return is_numeric($timeout) ? (int) $timeout : 120;
+        return is_numeric($timeout) && $timeout >= 0 ? (int) $timeout : 120;
     }
 }

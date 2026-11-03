@@ -6,7 +6,7 @@ Most apps that only call `Doxswap::convert()` through the facade need no code ch
 
 ### LibreOffice failures throw `ConversionFailedException`
 
-A failed `soffice` process used to throw Symfony's `ProcessFailedException`. It now throws `Blaspsoft\Doxswap\Exceptions\ConversionFailedException`, with the original `ProcessFailedException` available from `getPrevious()`.
+A failed `soffice` process used to throw Symfony's `ProcessFailedException`. It now throws `Blaspsoft\Doxswap\Exceptions\ConversionFailedException`, with the original `ProcessFailedException` available from `getPrevious()`. A conversion that exceeds `drivers.process_timeout` also throws `ConversionFailedException`, wrapping Symfony's `ProcessTimedOutException`.
 
 ```php
 // Before
@@ -35,6 +35,10 @@ $doxswap = app('doxswap'); // or use the Doxswap facade
 ### Custom formats
 
 `ConvertibleFormat::getDriver()` now takes the target format: `getDriver(?string $toFormat = null)`. Custom formats should extend `Blaspsoft\Doxswap\Formats\AbstractFormat` (LibreOffice) or `AbstractImageFormat` (LibreOffice for PDF, ImageMagick otherwise), and be registered on the `FormatRegistry`.
+
+### Input cleanup uses the full input path
+
+With `perform_cleanup` enabled, Doxswap now deletes the input file at the path you passed to `convert()`. In 1.x it deleted a file with the same name at the root of the input disk, so nested inputs like `reports/input.docx` were left in place.
 
 ### Configuration
 
