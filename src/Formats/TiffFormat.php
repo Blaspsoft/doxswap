@@ -2,7 +2,7 @@
 
 namespace Blaspsoft\Doxswap\Formats;
 
-class TiffFormat extends AbstractFormat
+class TiffFormat extends AbstractImageFormat
 {
     public function getName(): string
     {
@@ -17,10 +17,5 @@ class TiffFormat extends AbstractFormat
     public function getSupportedConversions(): array
     {
         return ['pdf', 'jpg', 'png', 'svg', 'bmp', 'webp', 'gif'];
-    }
-
-    protected function usesImageMagick(?string $toFormat): bool
-    {
-        return $toFormat !== 'pdf';
     }
 }

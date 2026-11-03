@@ -16,22 +16,13 @@ abstract class AbstractFormat implements ConvertibleFormat
     protected ConversionStrategy $libreOffice;
 
     /**
-     * The ImageMagick strategy.
-     *
-     * @var \Blaspsoft\Doxswap\Contracts\ConversionStrategy|null
-     */
-    protected ?ConversionStrategy $imageMagick;
-
-    /**
      * Create a new format instance.
      *
      * @param \Blaspsoft\Doxswap\Contracts\ConversionStrategy $libreOffice
-     * @param \Blaspsoft\Doxswap\Contracts\ConversionStrategy|null $imageMagick
      */
-    public function __construct(ConversionStrategy $libreOffice, ?ConversionStrategy $imageMagick = null)
+    public function __construct(ConversionStrategy $libreOffice)
     {
         $this->libreOffice = $libreOffice;
-        $this->imageMagick = $imageMagick;
     }
 
     abstract public function getName(): string;
@@ -41,17 +32,6 @@ abstract class AbstractFormat implements ConvertibleFormat
     abstract public function getSupportedConversions(): array;
 
     /**
-     * Determine if the conversion should use ImageMagick.
-     *
-     * @param string|null $toFormat
-     * @return bool
-     */
-    protected function usesImageMagick(?string $toFormat): bool
-    {
-        return false;
-    }
-
-    /**
      * Get the driver for the conversion.
      *
      * @param string|null $toFormat
@@ -59,10 +39,6 @@ abstract class AbstractFormat implements ConvertibleFormat
      */
     public function getDriver(?string $toFormat = null): ConversionStrategy
     {
-        if ($this->usesImageMagick($toFormat) && $this->imageMagick !== null) {
-            return $this->imageMagick;
-        }
-
         return $this->libreOffice;
     }
 

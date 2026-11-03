@@ -48,7 +48,7 @@ class DoxswapServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'doxswap');
 
-        $this->app->singleton(Filename::class, function ($app) {
+        $this->app->bind(Filename::class, function ($app) {
             return new Filename(
                 config('doxswap.filename.strategy'),
                 config('doxswap.filename.options'),
@@ -56,17 +56,17 @@ class DoxswapServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(LibreOffice::class, function ($app) {
+        $this->app->bind(LibreOffice::class, function ($app) {
             return new LibreOffice(
                 config('doxswap.drivers.libreoffice_path'),
                 config('doxswap.input_disk'),
                 config('doxswap.output_disk'),
                 $app->make(Filename::class),
-                config('doxswap.drivers.process_timeout', 120)
+                $this->processTimeout()
             );
         });
 
-        $this->app->singleton(ImageMagick::class, function ($app) {
+        $this->app->bind(ImageMagick::class, function ($app) {
             return new ImageMagick(
                 config('doxswap.input_disk'),
                 config('doxswap.output_disk'),
@@ -74,7 +74,7 @@ class DoxswapServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(FormatRegistry::class, function ($app) {
+        $this->app->bind(FormatRegistry::class, function ($app) {
             $libreOffice = $app->make(LibreOffice::class);
             $imageMagick = $app->make(ImageMagick::class);
 
@@ -106,7 +106,7 @@ class DoxswapServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(ConversionCleanup::class, function ($app) {
+        $this->app->bind(ConversionCleanup::class, function ($app) {
             return new ConversionCleanup(
                 config('doxswap.input_disk'),
                 config('doxswap.perform_cleanup')
@@ -119,5 +119,21 @@ class DoxswapServiceProvider extends ServiceProvider
                 $app->make(ConversionCleanup::class)
             );
         });
+    }
+
+    /**
+     * Get the LibreOffice process timeout from config.
+     *
+     * @return int|null
+     */
+    protected function processTimeout(): ?int
+    {
+        $timeout = config('doxswap.drivers.process_timeout', 120);
+
+        if ($timeout === null) {
+            return null;
+        }
+
+        return is_numeric($timeout) ? (int) $timeout : 120;
     }
 }

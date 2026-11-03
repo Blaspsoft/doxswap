@@ -49,7 +49,7 @@ class FormatRegistry
      */
     public function register(ConvertibleFormat $format): void
     {
-        $this->formats[$format->getName()] = $format;
+        $this->formats[strtolower($format->getName())] = $format;
     }
 
     /**
@@ -61,6 +61,8 @@ class FormatRegistry
      */
     public function getFormat(string $name): ConvertibleFormat
     {
+        $name = strtolower($name);
+
         if (!isset($this->formats[$name])) {
             throw new FormatNotFoundException($name);
         }
@@ -136,6 +138,8 @@ class FormatRegistry
      */
     public function convert(string $inputFile, string $toFormat): ConversionResult
     {
+        $toFormat = strtolower($toFormat);
+
         if (!Storage::disk($this->inputDisk)->exists($inputFile)) {
             throw new InputFileNotFoundException($inputFile);
         }

@@ -38,10 +38,10 @@ No linter is configured. Code follows PSR-2.
 **Key components:**
 
 - `src/Doxswap.php` — Main service class, orchestrates conversion and cleanup
-- `src/FormatRegistry.php` — Registers all 22 format handlers, validates files/MIME types, routes conversions
+- `src/FormatRegistry.php` — Registers all 21 format handlers, validates files/MIME types, routes conversions
 - `src/Strategies/LibreOffice.php` — Wraps headless `soffice` CLI for document conversions
 - `src/Strategies/ImageMagick.php` — Wraps PHP Imagick extension for image conversions
-- `src/Formats/` — 22 format classes implementing `ConvertibleFormat` contract; each defines supported conversions and selects its strategy
+- `src/Formats/` — 21 format classes. Document formats extend `AbstractFormat` (LibreOffice only); image formats extend `AbstractImageFormat` (LibreOffice for PDF, ImageMagick otherwise)
 - `src/Contracts/` — `ConvertibleFormat` (format interface) and `ConversionStrategy` (strategy interface)
 - `src/Filename.php` — Uses `blaspsoft/onym` for output filename generation (original, random, timestamp)
 - `src/ConversionResult.php` — DTO for conversion metadata (paths, duration, timestamps)
@@ -50,11 +50,11 @@ No linter is configured. Code follows PSR-2.
 
 **Design patterns:** Strategy pattern for conversion engines, Registry pattern for format lookup, Laravel Facade for public API.
 
-**Notable:** PNG format uses LibreOffice for PDF output but ImageMagick for image-to-image conversions. ZIP-based Office formats (DOCX, XLSX, PPTX) have special MIME type detection fallback.
+**Notable:** Strategies and formats are built in `DoxswapServiceProvider` from config on every resolve (not singletons), so runtime config changes apply. ZIP-based Office formats (DOCX, XLSX, PPTX) have special MIME type detection fallback.
 
 ## System Dependencies
 
-Integration tests and actual conversions require: LibreOffice, ImageMagick (with PHP ext-imagick), and Potrace. The CI workflow installs these on Ubuntu. LibreOffice path is configurable via `LIBRE_OFFICE_PATH` env var.
+Integration tests and actual conversions require: LibreOffice, ImageMagick (with PHP ext-imagick), and Potrace. The CI workflow installs these on Ubuntu. LibreOffice path is configurable via the `LIBREOFFICE_PATH` env var (`LIBRE_OFFICE_PATH` still works as a fallback), and the process timeout via `DOXSWAP_PROCESS_TIMEOUT`.
 
 ## Testing
 

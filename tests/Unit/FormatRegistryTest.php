@@ -39,6 +39,11 @@ class FormatRegistryTest extends TestCase
         $this->assertInstanceOf(DocFormat::class, $format);
     }
 
+    public function testGetFormatIsCaseInsensitive()
+    {
+        $this->assertInstanceOf(DocFormat::class, $this->formatRegistry->getFormat('DOC'));
+    }
+
     public function testGetFormatThrowsFormatNotFoundException()
     {
         $this->expectException(FormatNotFoundException::class);

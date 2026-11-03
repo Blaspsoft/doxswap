@@ -41,11 +41,11 @@ class LibreOffice implements ConversionStrategy
     protected Filename $filename;
 
     /**
-     * The process timeout in seconds.
+     * The process timeout in seconds, or null for no limit.
      *
-     * @var int
+     * @var int|null
      */
-    protected int $timeout;
+    protected ?int $timeout;
 
     /**
      * Create a new LibreOffice instance.
@@ -54,9 +54,9 @@ class LibreOffice implements ConversionStrategy
      * @param string $inputDisk
      * @param string $outputDisk
      * @param \Blaspsoft\Doxswap\Filename $filename
-     * @param int $timeout
+     * @param int|null $timeout
      */
-    public function __construct(string $path, string $inputDisk, string $outputDisk, Filename $filename, int $timeout = 120)
+    public function __construct(string $path, string $inputDisk, string $outputDisk, Filename $filename, ?int $timeout = 120)
     {
         $this->path = $path;
         $this->inputDisk = $inputDisk;
@@ -75,7 +75,7 @@ class LibreOffice implements ConversionStrategy
      */
     public function convert(string $inputFile, string $fromFormat, string $toFormat): ConversionResult
     {
-        $outputFile = Storage::disk($this->outputDisk)->path(str_replace($fromFormat, $toFormat, basename($inputFile)));
+        $outputFile = Storage::disk($this->outputDisk)->path(pathinfo($inputFile, PATHINFO_FILENAME) . '.' . $toFormat);
 
         $startTime = (float) microtime(true);
 

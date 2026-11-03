@@ -73,7 +73,8 @@ Configure paths for conversion tools:
 
 ```php
 'drivers' => [
-    'libreoffice_path' => env('LIBRE_OFFICE_PATH', '/usr/bin/soffice'),
+    'libreoffice_path' => env('LIBREOFFICE_PATH', env('LIBRE_OFFICE_PATH', '/usr/bin/soffice')),
+    'process_timeout' => env('DOXSWAP_PROCESS_TIMEOUT', 120), // seconds, or null for no limit
 ]
 ```
 
