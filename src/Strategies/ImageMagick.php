@@ -62,7 +62,7 @@ class ImageMagick implements ConversionStrategy
             throw new Exception("Conversion from $fromFormat to $toFormat is not supported by ImageMagick.");
         }
 
-        $outputFile = Storage::disk($this->outputDisk)->path(str_replace($fromFormat, $toFormat, basename($inputFile)));
+        $outputFile = Storage::disk($this->outputDisk)->path(pathinfo($inputFile, PATHINFO_FILENAME) . '.' . $toFormat);
 
         $startTime = (float) microtime(true);
         

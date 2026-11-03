@@ -57,7 +57,7 @@ class LibreOffice implements ConversionStrategy
      */
     public function convert(string $inputFile, string $fromFormat, string $toFormat): ConversionResult
     {
-        $outputFile = Storage::disk($this->outputDisk)->path(str_replace($fromFormat, $toFormat, basename($inputFile)));
+        $outputFile = Storage::disk($this->outputDisk)->path(pathinfo($inputFile, PATHINFO_FILENAME) . '.' . $toFormat);
 
         $startTime = (float) microtime(true);
 

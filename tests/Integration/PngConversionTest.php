@@ -66,5 +66,13 @@ class PngConversionTest extends TestCase
         Storage::disk('local')->put('test.png', file_get_contents(__DIR__ . '/../Stubs/sample.png'));
         $this->doxswap->convert('test.png', 'gif');
         $this->assertTrue(Storage::disk('local')->exists('test.gif'));
-    }   
+    }
+
+    public function testFormatNameInFilenameIsKept()
+    {
+        Storage::disk('local')->put('png-logo.png', file_get_contents(__DIR__ . '/../Stubs/sample.png'));
+        $this->doxswap->convert('png-logo.png', 'jpg');
+
+        $this->assertTrue(Storage::disk('local')->exists('png-logo.jpg'));
+    }
 }
