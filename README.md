@@ -156,7 +156,7 @@ RUN apk add --no-cache libreoffice imagemagick potrace
 
 ### PHP Requirements
 
-- PHP >= 8.1
+- PHP ^8.2 (8.2 or later 8.x)
 - ext-fileinfo
 - ext-imagick
 - Laravel >= 9.0
