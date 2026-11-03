@@ -6,6 +6,19 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - laravel: 12.*
+            testbench: 10.*
+            php: "8.2"
+          - laravel: 13.*
+            testbench: 11.*
+            php: "8.3"
+
+    name: Laravel ${{ matrix.laravel }} - PHP ${{ matrix.php }}
+
     steps:
       # Step 1: Check out the repository
       - name: Checkout code
@@ -17,7 +30,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: ${{ matrix.php }}
           extensions: mbstring, dom, zip, fileinfo, imagick
 
       # Step 3: Set up Git LFS
@@ -42,7 +55,9 @@ jobs:
 
       # Step 7: Install Composer dependencies
       - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --no-interaction --prefer-dist --with-all-dependencies
 
       # Step 8: Set up Laravel environment (if needed)
       - name: Set up Laravel environment
