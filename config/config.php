@@ -92,9 +92,13 @@ return [
     |
     | Supported drivers:
     | - libreoffice: The LibreOffice driver.
-    |   
+    |
+    | process_timeout is the LibreOffice timeout in seconds. Set it to null
+    | to run without a time limit.
+    |
     */
     'drivers' => [
-        'libreoffice_path' => env('LIBRE_OFFICE_PATH', '/usr/bin/soffice'),
+        'libreoffice_path' => env('LIBREOFFICE_PATH', env('LIBRE_OFFICE_PATH', '/usr/bin/soffice')),
+        'process_timeout' => env('DOXSWAP_PROCESS_TIMEOUT', 120),
     ],
 ];

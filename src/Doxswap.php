@@ -2,9 +2,6 @@
 
 namespace Blaspsoft\Doxswap;
 
-/**
- * @method static \Blaspsoft\Doxswap\Doxswap convert(string $file, string $toFormat)
- */
 class Doxswap
 {
     /**
@@ -22,38 +19,57 @@ class Doxswap
     protected ConversionCleanup $cleanup;
 
     /**
-     * The result.
-     *
-     * @var \Blaspsoft\Doxswap\ConversionResult|null
-     */
-    protected ?ConversionResult $result = null;
-
-    /**
      * Create a new Doxswap instance.
      *
-     * @return void
+     * @param \Blaspsoft\Doxswap\FormatRegistry $formatRegistry
+     * @param \Blaspsoft\Doxswap\ConversionCleanup $cleanup
      */
-    public function __construct()
+    public function __construct(FormatRegistry $formatRegistry, ConversionCleanup $cleanup)
     {
-        $this->formatRegistry = new FormatRegistry();
-
-        $this->cleanup = new ConversionCleanup();
+        $this->formatRegistry = $formatRegistry;
+        $this->cleanup = $cleanup;
     }
 
     /**
-     * Convert a file to a different format
+     * Convert a file to a different format.
      *
-     * @param string $file The absolute path to the file to convert
+     * @param string $file The path to the file relative to the input disk
      * @param string $toFormat The format to convert the file to
      * @return \Blaspsoft\Doxswap\ConversionResult
      */
     public function convert(string $file, string $toFormat): ConversionResult
     {
-        $this->result = $this->formatRegistry->convert($file, $toFormat);
+        $result = $this->formatRegistry->convert($file, $toFormat);
 
-        $this->cleanup->cleanup($this->result->inputFilename);
+        $this->cleanup->cleanup($file);
 
-        return $this->result;
+        return $result;
+    }
+
+    /**
+     * Check if a conversion is supported.
+     *
+     * @param string $fromFormat
+     * @param string $toFormat
+     * @return bool
+     */
+    public function supports(string $fromFormat, string $toFormat): bool
+    {
+        try {
+            $format = $this->formatRegistry->getFormat($fromFormat);
+            return $this->formatRegistry->isSupportedConversion($format, $toFormat);
+        } catch (\Blaspsoft\Doxswap\Exceptions\FormatNotFoundException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Get all supported format names.
+     *
+     * @return array
+     */
+    public function supportedFormats(): array
+    {
+        return array_keys($this->formatRegistry->getAllFormats());
     }
 }
-

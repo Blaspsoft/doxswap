@@ -3,12 +3,12 @@
 namespace Blaspsoft\Doxswap\Strategies;
 
 use Imagick;
-use Exception;
 use Blaspsoft\Doxswap\Filename;
 use Blaspsoft\Doxswap\ConversionResult;
 use Illuminate\Support\Facades\Storage;
 use Blaspsoft\Doxswap\Contracts\ConversionStrategy;
 use Blaspsoft\Doxswap\Exceptions\ConversionFailedException;
+use Blaspsoft\Doxswap\Exceptions\ImagickExtensionNotFoundException;
 
 class ImageMagick implements ConversionStrategy
 {
@@ -27,6 +27,13 @@ class ImageMagick implements ConversionStrategy
     protected string $outputDisk;
 
     /**
+     * The filename service.
+     *
+     * @var \Blaspsoft\Doxswap\Filename
+     */
+    protected Filename $filename;
+
+    /**
      * Supported formats for Imagick.
      *
      * @var array
@@ -34,12 +41,17 @@ class ImageMagick implements ConversionStrategy
     protected array $supportedFormats = ['bmp', 'png', 'jpg', 'jpeg', 'svg', 'tiff', 'webp', 'gif'];
 
     /**
-     * Create a new ImageMagickStrategy instance.
+     * Create a new ImageMagick instance.
+     *
+     * @param string $inputDisk
+     * @param string $outputDisk
+     * @param \Blaspsoft\Doxswap\Filename $filename
      */
-    public function __construct()
+    public function __construct(string $inputDisk, string $outputDisk, Filename $filename)
     {
-        $this->inputDisk = config('doxswap.input_disk');
-        $this->outputDisk = config('doxswap.output_disk');
+        $this->inputDisk = $inputDisk;
+        $this->outputDisk = $outputDisk;
+        $this->filename = $filename;
     }
 
     /**
@@ -49,23 +61,21 @@ class ImageMagick implements ConversionStrategy
      * @param string $fromFormat
      * @param string $toFormat
      * @return \Blaspsoft\Doxswap\ConversionResult
-     *
-     * @throws \Exception
      */
     public function convert(string $inputFile, string $fromFormat, string $toFormat): ConversionResult
     {
         if (!extension_loaded('imagick')) {
-            throw new Exception('Imagick extension is not installed or enabled.');
+            throw new ImagickExtensionNotFoundException();
         }
 
         if (!in_array(strtolower($fromFormat), $this->supportedFormats) || !in_array(strtolower($toFormat), $this->supportedFormats)) {
-            throw new Exception("Conversion from $fromFormat to $toFormat is not supported by ImageMagick.");
+            throw new ConversionFailedException("Conversion from $fromFormat to $toFormat is not supported by ImageMagick.");
         }
 
-        $outputFile = Storage::disk($this->outputDisk)->path(str_replace($fromFormat, $toFormat, basename($inputFile)));
+        $outputFile = Storage::disk($this->outputDisk)->path(pathinfo($inputFile, PATHINFO_FILENAME) . '.' . $toFormat);
 
         $startTime = (float) microtime(true);
-        
+
         try {
             $imagick = new Imagick();
             $imagick->readImage($inputFile);
@@ -73,8 +83,8 @@ class ImageMagick implements ConversionStrategy
             $imagick->writeImage($outputFile);
             $imagick->clear();
             $imagick->destroy();
-        } catch (Exception $e) {
-            throw new ConversionFailedException("ImageMagick conversion failed: " . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new ConversionFailedException("ImageMagick conversion failed: " . $e->getMessage(), 0, $e);
         }
 
         $endTime = (float) microtime(true);
@@ -83,14 +93,16 @@ class ImageMagick implements ConversionStrategy
             throw new ConversionFailedException("Converted file was not created.");
         }
 
-        $outputFile = Filename::rename($outputFile);
+        $outputFile = $this->filename->rename($outputFile);
 
         return new ConversionResult(
             inputFilePath: $inputFile,
             outputFilePath: $outputFile,
             toFormat: $toFormat,
             startTime: $startTime,
-            endTime: $endTime
+            endTime: $endTime,
+            inputDisk: $this->inputDisk,
+            outputDisk: $this->outputDisk
         );
     }
 }

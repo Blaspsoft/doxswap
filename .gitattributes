@@ -19,3 +19,10 @@ sample.xlsx filter=lfs diff=lfs merge=lfs -text
 sample.xml filter=lfs diff=lfs merge=lfs -text
 sample.gif filter=lfs diff=lfs merge=lfs -text
 sample.webp filter=lfs diff=lfs merge=lfs -text
+
+# Exclude development files from Composer dist archives
+/.github export-ignore
+/tests export-ignore
+/CLAUDE.md export-ignore
+/.styleci.yml export-ignore
+/phpunit.xml export-ignore

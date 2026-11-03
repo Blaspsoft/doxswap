@@ -18,7 +18,8 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageProviders($app): array
     {
         return [
-            'Blaspsoft\Doxswap\DoxswapServiceProvider', 
+            'Blaspsoft\Onym\OnymServiceProvider',
+            'Blaspsoft\Doxswap\DoxswapServiceProvider',
         ];
     }
 

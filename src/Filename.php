@@ -30,17 +30,17 @@ class Filename
     protected string $outputDisk;
 
     /**
-     * Create a new FileNamingService instance.
+     * Create a new Filename instance.
      *
-     * @return void
+     * @param string $strategy
+     * @param array $options
+     * @param string $outputDisk
      */
-    public function __construct()
+    public function __construct(string $strategy, array $options, string $outputDisk)
     {
-        $this->strategy = config('doxswap.filename.strategy');
-
-        $this->options = config('doxswap.filename.options');
-
-        $this->outputDisk = config('doxswap.output_disk');
+        $this->strategy = $strategy;
+        $this->options = $options;
+        $this->outputDisk = $outputDisk;
     }
 
     /**
@@ -66,13 +66,11 @@ class Filename
      * @param string $filePath
      * @return string
      */
-    public static function rename(string $filePath): string
+    public function rename(string $filePath): string
     {
-        $instance = new self();
+        $filename = $this->generateFileName($filePath);
 
-        $filename = $instance->generateFileName($filePath);
-
-        $newOutputFilePath = Storage::disk($instance->outputDisk)->path($filename);
+        $newOutputFilePath = Storage::disk($this->outputDisk)->path($filename);
 
         File::move($filePath, $newOutputFilePath);
 

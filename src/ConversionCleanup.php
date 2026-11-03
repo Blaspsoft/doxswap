@@ -14,22 +14,22 @@ class ConversionCleanup
     protected string $inputDisk;
 
     /**
-     * The cleanup strategy.
+     * Whether to perform cleanup.
      *
-     * @var string
+     * @var bool
      */
     protected bool $performCleanup;
 
     /**
      * Create a new ConversionCleanup instance.
      *
-     * @return void
+     * @param string $inputDisk
+     * @param bool $performCleanup
      */
-    public function __construct()
+    public function __construct(string $inputDisk, bool $performCleanup)
     {
-        $this->inputDisk = config('doxswap.input_disk');
-
-        $this->performCleanup = config('doxswap.perform_cleanup');
+        $this->inputDisk = $inputDisk;
+        $this->performCleanup = $performCleanup;
     }
 
     /**

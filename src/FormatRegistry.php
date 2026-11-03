@@ -4,28 +4,8 @@ namespace Blaspsoft\Doxswap;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Blaspsoft\Doxswap\Formats\BmpFormat;
-use Blaspsoft\Doxswap\Formats\CsvFormat;
-use Blaspsoft\Doxswap\Formats\DocFormat;
-use Blaspsoft\Doxswap\Formats\JpgFormat;
-use Blaspsoft\Doxswap\Formats\OdpFormat;
-use Blaspsoft\Doxswap\Formats\OdsFormat;
-use Blaspsoft\Doxswap\Formats\OdtFormat;
-use Blaspsoft\Doxswap\Formats\PngFormat;
-use Blaspsoft\Doxswap\Formats\PptFormat;
-use Blaspsoft\Doxswap\Formats\RtfFormat;
-use Blaspsoft\Doxswap\Formats\SvgFormat;
-use Blaspsoft\Doxswap\Formats\TxtFormat;
-use Blaspsoft\Doxswap\Formats\XlsFormat;
-use Blaspsoft\Doxswap\Formats\XmlFormat;
-use Blaspsoft\Doxswap\Formats\DocxFormat;
-use Blaspsoft\Doxswap\Formats\HtmlFormat;
-use Blaspsoft\Doxswap\Formats\PptxFormat;
-use Blaspsoft\Doxswap\Formats\XlsxFormat;
-use Blaspsoft\Doxswap\Formats\TiffFormat;
-use Blaspsoft\Doxswap\Formats\GifFormat;
-use Blaspsoft\Doxswap\Formats\WebpFormat;
 use Blaspsoft\Doxswap\Contracts\ConvertibleFormat;
+use Blaspsoft\Doxswap\Exceptions\FormatNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\InputFileNotFoundException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedMimeTypeException;
 use Blaspsoft\Doxswap\Exceptions\UnsupportedConversionException;
@@ -49,53 +29,16 @@ class FormatRegistry
     /**
      * Create a new FormatRegistry instance.
      *
-     * @return void
+     * @param string $inputDisk
+     * @param array $formats
      */
-    public function __construct()
+    public function __construct(string $inputDisk, array $formats = [])
     {
-        $this->inputDisk = config('doxswap.input_disk');
+        $this->inputDisk = $inputDisk;
 
-        $this->register(new DocFormat());
-
-        $this->register(new DocxFormat());
-
-        $this->register(new OdtFormat());
-
-        $this->register(new RtfFormat());
-
-        $this->register(new TxtFormat());
-
-        $this->register(new HtmlFormat());
-
-        $this->register(new XmlFormat());
-
-        $this->register(new XlsFormat());
-
-        $this->register(new XlsxFormat());
-
-        $this->register(new OdsFormat());
-
-        $this->register(new PptxFormat());
-
-        $this->register(new PptFormat());
-
-        $this->register(new OdpFormat());
-
-        $this->register(new SvgFormat());
-
-        $this->register(new JpgFormat());
-
-        $this->register(new PngFormat());
-
-        $this->register(new BmpFormat());
-
-        $this->register(new CsvFormat());
-
-        $this->register(new TiffFormat());
-
-        $this->register(new GifFormat());
-
-        $this->register(new WebpFormat());
+        foreach ($formats as $format) {
+            $this->register($format);
+        }
     }
 
     /**
@@ -106,7 +49,7 @@ class FormatRegistry
      */
     public function register(ConvertibleFormat $format): void
     {
-        $this->formats[$format->getName()] = $format;
+        $this->formats[strtolower($format->getName())] = $format;
     }
 
     /**
@@ -114,9 +57,16 @@ class FormatRegistry
      *
      * @param string $name
      * @return \Blaspsoft\Doxswap\Contracts\ConvertibleFormat
+     * @throws \Blaspsoft\Doxswap\Exceptions\FormatNotFoundException
      */
     public function getFormat(string $name): ConvertibleFormat
     {
+        $name = strtolower($name);
+
+        if (!isset($this->formats[$name])) {
+            throw new FormatNotFoundException($name);
+        }
+
         return $this->formats[$name];
     }
 
@@ -139,10 +89,10 @@ class FormatRegistry
      */
     public function isSupportedConversion(ConvertibleFormat $inputFormat, string $outputFormat): bool
     {
-        return in_array($outputFormat, $inputFormat->getSupportedConversions());
+        return in_array(strtolower($outputFormat), array_map('strtolower', $inputFormat->getSupportedConversions()));
     }
 
-    /** 
+    /**
      * Check if a mime type is supported.
      *
      * @param \Blaspsoft\Doxswap\Contracts\ConvertibleFormat $format
@@ -163,7 +113,7 @@ class FormatRegistry
     protected function detectZipBasedMimeType(string $inputFile): string
     {
         $zip = new \ZipArchive();
-    
+
         if ($zip->open($inputFile) === TRUE) {
             $mimetype = $zip->getFromName('mimetype');
             $zip->close();
@@ -188,6 +138,8 @@ class FormatRegistry
      */
     public function convert(string $inputFile, string $toFormat): ConversionResult
     {
+        $toFormat = strtolower($toFormat);
+
         if (!Storage::disk($this->inputDisk)->exists($inputFile)) {
             throw new InputFileNotFoundException($inputFile);
         }

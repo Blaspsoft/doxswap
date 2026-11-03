@@ -3,6 +3,7 @@
 namespace Blaspsoft\Doxswap\Tests\Integration;
 
 use Blaspsoft\Doxswap\Doxswap;
+use Blaspsoft\Doxswap\ConversionResult;
 use Blaspsoft\Doxswap\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,7 +17,7 @@ class DocxConversionTest extends TestCase
     
         Storage::fake('local');
 
-        $this->doxswap = new Doxswap();
+        $this->doxswap = $this->app->make('doxswap');
     }
 
     public function testDocxToPdfConversion()
@@ -73,5 +74,21 @@ class DocxConversionTest extends TestCase
         $this->doxswap->convert('test.docx', 'xml');
 
         $this->assertTrue(Storage::disk('local')->exists('test.xml'));
+    }
+
+    public function testFormatNameInFilenameIsKept()
+    {
+        Storage::disk('local')->put('docx-guide.docx', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
+        $this->doxswap->convert('docx-guide.docx', 'pdf');
+
+        $this->assertTrue(Storage::disk('local')->exists('docx-guide.pdf'));
+    }
+
+    public function testUppercaseExtensionConversion()
+    {
+        Storage::disk('local')->put('REPORT.DOCX', file_get_contents(__DIR__ . '/../Stubs/sample.docx'));
+        $this->doxswap->convert('REPORT.DOCX', 'PDF');
+
+        $this->assertTrue(Storage::disk('local')->exists('REPORT.pdf'));
     }
 }

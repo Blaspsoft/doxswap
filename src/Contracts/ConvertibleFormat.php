@@ -12,7 +12,7 @@ interface ConvertibleFormat
 
     public function getSupportedConversions(): array;
 
-    public function getDriver(): ConversionStrategy;
+    public function getDriver(?string $toFormat = null): ConversionStrategy;
 
     public function convert(string $inputFile, string $toFormat): ConversionResult;
 }
